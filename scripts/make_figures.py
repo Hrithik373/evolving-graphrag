@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import textwrap
 from pathlib import Path
 
 # Categorical slots, fixed order, never cycled.
@@ -28,7 +29,7 @@ SURFACE = "#fcfcfb"
 FONT = 'system-ui, -apple-system, "Segoe UI", sans-serif'
 
 W, H = 720, 420
-PAD = {"top": 54, "right": 34, "bottom": 62, "left": 78}
+PAD = {"top": 68, "right": 34, "bottom": 62, "left": 78}
 
 
 def _nice(value: float) -> float:
@@ -51,13 +52,21 @@ def _fmt(value: float) -> str:
 
 
 def _open(title: str, subtitle: str) -> list[str]:
-    return [
+    """Header block. SVG text does not wrap, so the subtitle is wrapped here or it runs
+    off the right edge of the canvas."""
+    lines = textwrap.wrap(subtitle, width=92) or [""]
+    parts = [
         f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W}" height="{H}" '
         f"font-family='{FONT}'>",
         f'<rect width="{W}" height="{H}" fill="{SURFACE}"/>',
-        f'<text x="{PAD["left"]}" y="26" font-size="15" font-weight="600" fill="{INK}">{title}</text>',
-        f'<text x="{PAD["left"]}" y="44" font-size="11.5" fill="{INK_SOFT}">{subtitle}</text>',
+        f'<text x="{PAD["left"]}" y="24" font-size="15" font-weight="600" fill="{INK}">{title}</text>',
     ]
+    for index, line in enumerate(lines):
+        parts.append(
+            f'<text x="{PAD["left"]}" y="{41 + index * 14}" font-size="11.5" '
+            f'fill="{INK_SOFT}">{line}</text>'
+        )
+    return parts
 
 
 def _axes(parts: list[str], max_y: float, y_label: str, x_label: str) -> None:
@@ -127,15 +136,25 @@ def figure_pareto(points: list[dict], out: Path) -> Path:
             f'stroke-dasharray="4 3"/>'
         )
 
+    # Several budgets land on exactly the same coordinates once the dirty set is fully
+    # drained, so their labels were printed on top of one another. Collapse coincident
+    # points into a single mark with one combined label.
+    grouped: dict[tuple[int, int], list[dict]] = {}
     for point in points:
-        reference = not point["label"].startswith("evolving")
+        key = (round(x_at(point["update_tokens"])), round(y_at(point["mean_stale_touched"])))
+        grouped.setdefault(key, []).append(point)
+
+    for (x, y), members in sorted(grouped.items()):
+        reference = not members[0]["label"].startswith("evolving")
         colour = SERIES[1] if reference else SERIES[0]
-        x, y = x_at(point["update_tokens"]), y_at(point["mean_stale_touched"])
         parts.append(
-            f'<circle cx="{x:.1f}" cy="{y:.1f}" r="7" fill="{colour}" stroke="{SURFACE}" stroke-width="2"/>'
+            f'<circle cx="{x:.1f}" cy="{y:.1f}" r="7" fill="{colour}" stroke="{SURFACE}" '
+            f'stroke-width="2"/>'
         )
-        label = point["label"].replace("evolving/", "")
-        anchor = "end" if x > W - PAD["right"] - 110 else "start"
+        names = [m["label"].replace("evolving/", "").replace("budget=", "budget ") for m in members]
+        label = names[0] if len(names) == 1 else f"{names[0]}–{names[-1].split()[-1]}"
+        # Keep the text inside the canvas: flip the anchor when the point sits near the edge.
+        anchor = "end" if x > W - PAD["right"] - 120 else "start"
         offset = -12 if anchor == "end" else 12
         parts.append(
             f'<text x="{x + offset:.1f}" y="{y + 4:.1f}" text-anchor="{anchor}" font-size="10.5" '
@@ -143,7 +162,8 @@ def figure_pareto(points: list[dict], out: Path) -> Path:
         )
 
     parts.append(
-        f'<g transform="translate({PAD["left"]},{H - 50})" font-size="11" fill="{INK_SOFT}">'
+        f'<g transform="translate({W - PAD["right"] - 210},{PAD["top"] + 14})" font-size="11" '
+        f'fill="{INK_SOFT}">'
         f'<circle cx="5" cy="-4" r="5" fill="{SERIES[0]}"/><text x="16" y="0">this system</text>'
         f'<circle cx="115" cy="-4" r="5" fill="{SERIES[1]}"/><text x="126" y="0">full reindex</text></g>'
     )
@@ -197,8 +217,11 @@ def figure_scaling(rows: list[dict], out: Path) -> Path:
             f'font-size="10" fill="{MUTED}">{row["reindex_cost_ratio"]}x</text>'
         )
 
+    # Above the plot, not below it: the bottom of this chart already carries two rows of
+    # tick labels (document count and the ratio) and the legend was landing on them.
     parts.append(
-        f'<g transform="translate({PAD["left"]},{H - 46})" font-size="11" fill="{INK_SOFT}">'
+        f'<g transform="translate({W - PAD["right"] - 290},{PAD["top"] - 8})" font-size="11" '
+        f'fill="{INK_SOFT}">'
         f'<rect x="0" y="-9" width="10" height="10" rx="3" fill="{SERIES[1]}"/>'
         f'<text x="16" y="0">full rebuild</text>'
         f'<rect x="110" y="-9" width="10" height="10" rx="3" fill="{SERIES[0]}"/>'
@@ -220,17 +243,20 @@ def figure_deletion(scenarios: list[dict], out: Path) -> Path:
 
     parts = _open(
         "Stale answers after deletion",
-        "Questions still answered with a fact only a deleted document supported. "
+        "Questions still answered with a fact that only a deleted document supported. "
         "Lower is better; zero is correct.",
     )
-    _axes(parts, 1.0, "stale-answer rate", "system")
+    # A rate axis wants round ticks (0, .25, .5, .75, 1), so the headroom for a
+    # full-height bar's label comes from moving the label inside the bar instead.
+    axis_max = 1.0
+    _axes(parts, axis_max, "stale-answer rate", "system")
 
     slot = inner_w / max(len(rows), 1)
     for index, row in enumerate(rows):
         value = row["stale_answer_rate"]
         bar_w = min(72, slot - 26)
         x = PAD["left"] + slot * index + (slot - bar_w) / 2
-        bar_h = max(value * inner_h, 1.5)
+        bar_h = max((value / axis_max) * inner_h, 1.5)
         y = PAD["top"] + inner_h - bar_h
         colour = "#0ca30c" if value == 0 else "#d03b3b" if value >= 0.5 else "#ec835a"
         parts.append(
@@ -239,10 +265,17 @@ def figure_deletion(scenarios: list[dict], out: Path) -> Path:
             f"Q{x + bar_w:.1f},{y:.1f} {x + bar_w:.1f},{y + 4:.1f} "
             f'L{x + bar_w:.1f},{PAD["top"] + inner_h} Z" fill="{colour}"/>'
         )
-        parts.append(
-            f'<text x="{x + bar_w / 2:.1f}" y="{y - 6:.1f}" text-anchor="middle" font-size="11" '
-            f'font-weight="600" fill="{INK}">{value:.2f}</text>'
-        )
+        # Inside the bar when it is tall enough to hold the text, above it otherwise.
+        if bar_h > 26:
+            parts.append(
+                f'<text x="{x + bar_w / 2:.1f}" y="{y + 16:.1f}" text-anchor="middle" '
+                f'font-size="11" font-weight="600" fill="{SURFACE}">{value:.2f}</text>'
+            )
+        else:
+            parts.append(
+                f'<text x="{x + bar_w / 2:.1f}" y="{y - 6:.1f}" text-anchor="middle" '
+                f'font-size="11" font-weight="600" fill="{INK}">{value:.2f}</text>'
+            )
         parts.append(
             f'<text x="{x + bar_w / 2:.1f}" y="{PAD["top"] + inner_h + 18:.1f}" text-anchor="middle" '
             f'font-size="10.5" fill="{INK_SOFT}">{row["system"]}</text>'

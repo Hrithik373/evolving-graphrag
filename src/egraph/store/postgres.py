@@ -507,4 +507,3 @@ class PostgresStore(GraphStore):
             total_tokens=int(row["total_tokens"]),
             total_usd=round(float(row["total_usd"]), 6),
         )
-

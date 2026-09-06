@@ -128,10 +128,24 @@ did not touch, so an edit costs proportional to the edit, not to the document.
 
 ```bash
 make install          # venv + package
-make test             # 107 tests, fully offline
+make test             # 133 tests, fully offline
 make demo             # ingest → query → update → delete, narrated
 make eval             # every table and figure into results/
 ```
+
+### Run the API and the console together
+
+```bash
+python scripts/dev.py       # or: ./start.sh   ·   start.cmd   ·   make dev
+```
+
+One command, one Ctrl+C to stop both. It finds free ports if 8000 or 5173 are taken and
+points the console's dev proxy at whichever port the API actually got, seeds the
+mini-corpus, and kills the whole process tree on exit so nothing is left holding a port.
+
+`make` is not available on a stock Windows install — use `python scripts/dev.py` or
+double-click `start.cmd` there. Every Make target is a one-line command you can run
+directly; the Makefile is a convenience, not a dependency.
 
 Everything above runs with `EGRAPH_STORE_BACKEND=memory`, `EGRAPH_QUEUE_BACKEND=inline` and
 `EGRAPH_LLM_BACKEND=mock` — no Docker, no Redis, no API key, no model download.

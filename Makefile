@@ -16,8 +16,8 @@ COMPOSE ?= docker compose
 RESULTS ?= results
 
 .DEFAULT_GOAL := help
-.PHONY: help install dev test test-fast lint fmt typecheck smoke demo ingest churn query \
-        staleness stats integrity eval eval-quick figures api worker up down logs ps \
+.PHONY: help install setup test test-fast lint fmt typecheck smoke demo ingest churn query \
+        staleness stats integrity eval eval-quick figures dev api worker up down logs ps \
         restart rebuild backup restore clean frontend frontend-build frontend-install \
         docker-test seed check
 
@@ -36,7 +36,7 @@ install: ## Create the venv and install the package with dev extras
 	$(PYTHON) -m pip install -e ".[dev]"
 	@echo "installed. optional: $(PYTHON) -m pip install -e '.[leiden,embeddings]'"
 
-dev: install frontend-install ## Full local setup, backend and frontend
+setup: install frontend-install ## Full local setup, backend and frontend
 
 frontend-install: ## Install the frontend dependencies
 	cd frontend && npm install --no-audit --no-fund
@@ -102,6 +102,9 @@ figures: eval ## Regenerate the figures from the eval output
 	$(PYTHON) scripts/make_figures.py --results $(RESULTS)
 
 ## ----------------------------------------------------------------- services (local)
+dev: ## Run the API and the console together (one Ctrl+C stops both)
+	$(PYTHON) scripts/dev.py $(ARGS)
+
 api: ## Run the API on :8000 against the local store
 	$(BIN)/uvicorn egraph.api.app:app --reload --host 0.0.0.0 --port 8000
 
