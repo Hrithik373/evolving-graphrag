@@ -17,9 +17,10 @@ from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import Any
 
-from fastapi import Depends, FastAPI, File, HTTPException, Query, Response, UploadFile
+from fastapi import APIRouter, Depends, FastAPI, File, HTTPException, Query, Response, UploadFile
 from fastapi.concurrency import run_in_threadpool
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from prometheus_client import CONTENT_TYPE_LATEST, generate_latest
 from pydantic import BaseModel, Field
 
@@ -74,10 +75,31 @@ class AskQuestion(BaseModel):
 async def lifespan(app: FastAPI):
     logging.basicConfig(level="INFO", format="%(asctime)s %(levelname)s %(name)s %(message)s")
     pipeline = get_pipeline()
+    if get_settings().seed_on_start:
+        await run_in_threadpool(_seed_if_empty, pipeline)
     metrics.observe_index(pipeline.store.stats())
     log.info("api ready v%s", __version__)
     yield
     pipeline.close()
+
+
+def _seed_if_empty(pipeline: Pipeline) -> None:
+    """Load the bundled mini-corpus, but only into an index that has nothing in it.
+
+    Guarded on emptiness rather than on a flag alone: a restart of a deployed service must
+    never re-seed over documents somebody uploaded.
+    """
+    if pipeline.store.list_documents():
+        return
+    try:
+        from fixtures.mini_corpus import BASE_DOCS
+    except ImportError:
+        log.warning("seed_on_start is set but the fixture corpus is not installed")
+        return
+    for doc_id, text in BASE_DOCS.items():
+        pipeline.apply(DocumentChange(op="add", doc_id=doc_id, uri=f"{doc_id}.md", content=text))
+    report = pipeline.drain()
+    log.info("seeded %d documents, %d summaries written", len(BASE_DOCS), report.recomputed)
 
 
 def create_app() -> FastAPI:
@@ -96,8 +118,10 @@ def create_app() -> FastAPI:
         allow_headers=["*"],
     )
 
+    router = APIRouter()
+
     # ------------------------------------------------------------------ documents
-    @app.post("/documents", response_model=ChurnResult, status_code=202, tags=["documents"])
+    @router.post("/documents", response_model=ChurnResult, status_code=202, tags=["documents"])
     async def add_document(
         body: CreateDocument, pipeline: Pipeline = Depends(get_pipeline)
     ) -> ChurnResult:
@@ -109,7 +133,7 @@ def create_app() -> FastAPI:
         )
         return await _apply(pipeline, change)
 
-    @app.post("/documents/upload", status_code=202, tags=["documents"])
+    @router.post("/documents/upload", status_code=202, tags=["documents"])
     async def upload_documents(
         files: list[UploadFile] = File(...),
         pipeline: Pipeline = Depends(get_pipeline),
@@ -169,7 +193,7 @@ def create_app() -> FastAPI:
             "rejections": rejected,
         }
 
-    @app.put("/documents/{doc_id}", response_model=ChurnResult, tags=["documents"])
+    @router.put("/documents/{doc_id}", response_model=ChurnResult, tags=["documents"])
     async def update_document(
         doc_id: str, body: UpdateDocument, pipeline: Pipeline = Depends(get_pipeline)
     ) -> ChurnResult:
@@ -182,7 +206,7 @@ def create_app() -> FastAPI:
         )
         return await _apply(pipeline, change)
 
-    @app.delete("/documents/{doc_id}", response_model=ChurnResult, tags=["documents"])
+    @router.delete("/documents/{doc_id}", response_model=ChurnResult, tags=["documents"])
     async def delete_document(
         doc_id: str, pipeline: Pipeline = Depends(get_pipeline)
     ) -> ChurnResult:
@@ -191,7 +215,7 @@ def create_app() -> FastAPI:
             raise HTTPException(status_code=404, detail=f"unknown document {doc_id}")
         return await _apply(pipeline, DocumentChange(op="delete", doc_id=doc_id))
 
-    @app.get("/documents", tags=["documents"])
+    @router.get("/documents", tags=["documents"])
     async def list_documents(
         status: str | None = Query(default=None, pattern="^(active|deleted)$"),
         pipeline: Pipeline = Depends(get_pipeline),
@@ -210,7 +234,7 @@ def create_app() -> FastAPI:
             for d in docs
         ]
 
-    @app.get("/documents/{doc_id}", tags=["documents"])
+    @router.get("/documents/{doc_id}", tags=["documents"])
     async def get_document(doc_id: str, pipeline: Pipeline = Depends(get_pipeline)) -> dict:
         doc = await run_in_threadpool(pipeline.store.get_document, doc_id)
         if doc is None:
@@ -224,21 +248,21 @@ def create_app() -> FastAPI:
         }
 
     # ------------------------------------------------------------------ query
-    @app.post("/query", response_model=Answer, tags=["query"])
+    @router.post("/query", response_model=Answer, tags=["query"])
     async def query(body: AskQuestion, pipeline: Pipeline = Depends(get_pipeline)) -> Answer:
         request = QueryRequest(**body.model_dump())
         return await run_in_threadpool(pipeline.query, request)
 
     # ------------------------------------------------------------------ index
-    @app.get("/index/staleness", response_model=Staleness, tags=["index"])
+    @router.get("/index/staleness", response_model=Staleness, tags=["index"])
     async def staleness(pipeline: Pipeline = Depends(get_pipeline)) -> Staleness:
         return await run_in_threadpool(pipeline.staleness)
 
-    @app.get("/index/stats", response_model=IndexStats, tags=["index"])
+    @router.get("/index/stats", response_model=IndexStats, tags=["index"])
     async def stats(pipeline: Pipeline = Depends(get_pipeline)) -> IndexStats:
         return await run_in_threadpool(pipeline.stats)
 
-    @app.get("/index/graph", tags=["index"])
+    @router.get("/index/graph", tags=["index"])
     async def graph(
         limit: int = Query(default=250, ge=1, le=2000),
         pipeline: Pipeline = Depends(get_pipeline),
@@ -246,7 +270,7 @@ def create_app() -> FastAPI:
         """Node/edge projection for the frontend graph explorer."""
         return await run_in_threadpool(_graph_projection, pipeline, limit)
 
-    @app.get("/index/communities", tags=["index"])
+    @router.get("/index/communities", tags=["index"])
     async def communities(pipeline: Pipeline = Depends(get_pipeline)) -> list[dict[str, Any]]:
         items = await run_in_threadpool(pipeline.store.all_communities)
         return [
@@ -265,7 +289,7 @@ def create_app() -> FastAPI:
             for c in sorted(items, key=lambda c: (not c.dirty, c.title))
         ]
 
-    @app.get("/index/resolutions", tags=["index"])
+    @router.get("/index/resolutions", tags=["index"])
     async def resolutions(
         limit: int = Query(default=100, ge=1, le=1000),
         pipeline: Pipeline = Depends(get_pipeline),
@@ -273,7 +297,7 @@ def create_app() -> FastAPI:
         rows = await run_in_threadpool(pipeline.store.list_resolutions, limit)
         return [r.model_dump(mode="json") for r in reversed(rows)]
 
-    @app.get("/index/costs", tags=["index"])
+    @router.get("/index/costs", tags=["index"])
     async def costs(pipeline: Pipeline = Depends(get_pipeline)) -> dict[str, Any]:
         rows = await run_in_threadpool(pipeline.store.list_costs, 2000)
         by_op: dict[str, dict[str, float]] = {}
@@ -294,7 +318,7 @@ def create_app() -> FastAPI:
         }
 
     # ------------------------------------------------------------------ maintenance
-    @app.post("/maintenance/recompute", tags=["maintenance"])
+    @router.post("/maintenance/recompute", tags=["maintenance"])
     async def recompute(
         batch_size: int | None = Query(default=None, ge=1, le=500),
         drain: bool = Query(default=False),
@@ -308,22 +332,22 @@ def create_app() -> FastAPI:
         )
         return report.as_dict()
 
-    @app.post("/maintenance/compact", tags=["maintenance"])
+    @router.post("/maintenance/compact", tags=["maintenance"])
     async def compact(pipeline: Pipeline = Depends(get_pipeline)) -> dict[str, Any]:
         report = await run_in_threadpool(pipeline.compact)
         return report.as_dict()
 
-    @app.get("/maintenance/integrity", tags=["maintenance"])
+    @router.get("/maintenance/integrity", tags=["maintenance"])
     async def integrity(pipeline: Pipeline = Depends(get_pipeline)) -> dict[str, Any]:
         """Provenance invariants, checkable live. All three lists must stay empty."""
         return await run_in_threadpool(_integrity, pipeline)
 
     # ------------------------------------------------------------------ ops
-    @app.get("/health", tags=["ops"])
+    @router.get("/health", tags=["ops"])
     async def health() -> dict[str, str]:
         return {"status": "ok", "version": __version__}
 
-    @app.get("/ready", tags=["ops"])
+    @router.get("/ready", tags=["ops"])
     async def ready(pipeline: Pipeline = Depends(get_pipeline), response: Response = None):
         store_ok = await run_in_threadpool(pipeline.store.ping)
         queue_ok = True
@@ -346,7 +370,7 @@ def create_app() -> FastAPI:
             response.status_code = 503
         return body
 
-    @app.get("/config", tags=["ops"])
+    @router.get("/config", tags=["ops"])
     async def config() -> dict[str, Any]:
         cfg = get_settings()
         return {
@@ -366,13 +390,54 @@ def create_app() -> FastAPI:
 
     if settings.metrics_enabled:
 
-        @app.get("/metrics", include_in_schema=False)
+        @router.get("/metrics", include_in_schema=False)
         async def prometheus_metrics() -> Response:
             pipeline = get_pipeline()
             await run_in_threadpool(pipeline.stats)  # refresh gauges on scrape
             return Response(generate_latest(), media_type=CONTENT_TYPE_LATEST)
 
+    # The same surface twice: at the root, which is how the API is normally consumed, and
+    # under /api for the single-container deployment where the console shares the origin.
+    # The console's own /documents and /query routes would otherwise shadow the API's.
+    app.include_router(router)
+    app.include_router(router, prefix="/api", include_in_schema=False)
+
+    _mount_frontend(app)
     return app
+
+
+class _SPAFiles(StaticFiles):
+    """Static files with a single-page-app fallback.
+
+    ``StaticFiles(html=True)`` serves index.html for a *directory*, but a client-side route
+    like /dashboard is neither a file nor a directory, so it 404s. Deep-linking and a
+    browser refresh both hit exactly that case, so unknown paths fall back to index.html
+    and let the router in the page decide what they mean.
+    """
+
+    async def get_response(self, path: str, scope):
+        from starlette.exceptions import HTTPException as StarletteHTTPException
+
+        try:
+            return await super().get_response(path, scope)
+        except StarletteHTTPException as exc:
+            if exc.status_code != 404:
+                raise
+            return await super().get_response("index.html", scope)
+
+
+def _mount_frontend(app: FastAPI) -> None:
+    """Serve the built console from this process, if it was built into the image.
+
+    Only the single-container deployment does this. Under Docker Compose and in dev the
+    console is its own service, ``frontend/dist`` is absent, and the mount is skipped.
+    """
+    dist = Path(__file__).resolve().parents[3] / "frontend" / "dist"
+    if not dist.is_dir():
+        return
+    # Mounted last, so every API route registered above wins the match.
+    app.mount("/", _SPAFiles(directory=str(dist), html=True), name="console")
+    log.info("serving the console from %s", dist)
 
 
 # ---------------------------------------------------------------------- helpers

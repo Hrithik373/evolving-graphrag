@@ -42,7 +42,9 @@ EXPOSE 8000 9100
 FROM base AS api
 HEALTHCHECK --interval=10s --timeout=3s --start-period=20s --retries=5 \
     CMD curl -fsS http://localhost:8000/health || exit 1
-CMD ["uvicorn", "egraph.api.app:app", "--host", "0.0.0.0", "--port", "8000"]
+# Shell form so ${PORT} expands: every PaaS assigns the port at runtime and expects the
+# process to bind it. Falls back to 8000 for Docker Compose, which sets no PORT.
+CMD ["sh", "-c", "uvicorn egraph.api.app:app --host 0.0.0.0 --port ${PORT:-8000}"]
 
 # ------------------------------------------------------------------------- worker
 FROM base AS worker
@@ -50,3 +52,26 @@ FROM base AS worker
 HEALTHCHECK --interval=15s --timeout=3s --start-period=20s --retries=5 \
     CMD curl -fsS http://localhost:9100/metrics || exit 1
 CMD ["arq", "egraph.workers.worker.WorkerSettings"]
+
+# --------------------------------------------------------------------------- demo
+# One container: the API plus the built console, for a free single-service deployment
+# (Render, Railway, Fly, Hugging Face Spaces). This is the *demo-lite* shape - there is no
+# separate worker, so extraction runs inline on the request and the asynchronous write path
+# the project is about is not exercised. Use the Compose stack to demonstrate that.
+FROM node:22-alpine AS console
+WORKDIR /console
+COPY frontend/package.json ./
+RUN npm install --no-audit --no-fund
+COPY frontend/tsconfig.json frontend/vite.config.ts frontend/index.html ./
+COPY frontend/src/ src/
+RUN npm run build
+
+FROM base AS demo
+COPY --from=console --chown=egraph:egraph /console/dist /app/frontend/dist
+ENV EGRAPH_STORE_BACKEND=postgres \
+    EGRAPH_QUEUE_BACKEND=inline \
+    EGRAPH_LLM_BACKEND=mock \
+    EGRAPH_SEED_ON_START=true
+HEALTHCHECK --interval=15s --timeout=3s --start-period=25s --retries=5 \
+    CMD curl -fsS http://localhost:${PORT:-8000}/health || exit 1
+CMD ["sh", "-c", "uvicorn egraph.api.app:app --host 0.0.0.0 --port ${PORT:-8000}"]

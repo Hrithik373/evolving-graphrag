@@ -10,7 +10,7 @@ from typing import Literal
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-StoreBackend = Literal["memory", "arcadedb"]
+StoreBackend = Literal["memory", "arcadedb", "postgres"]
 QueueBackend = Literal["inline", "arq"]
 LLMBackend = Literal["mock", "gateway", "anthropic"]
 EmbedBackend = Literal["hash", "sentence-transformers", "gateway"]
@@ -35,6 +35,11 @@ class Settings(BaseSettings):
     arcadedb_database: str = "egraph"
     arcadedb_user: str = "root"
     arcadedb_password: str = "playwithdata"
+    # Postgres is the deployable backend: free and managed on Neon, Supabase, Render and
+    # Railway, where ArcadeDB needs a platform that runs Docker with a persistent volume.
+    # Providers hand out a DATABASE_URL, so that is accepted as an alias.
+    postgres_dsn: str = "postgresql://egraph:egraph@localhost:5432/egraph"
+    postgres_pool_max: int = 8
     # Where the memory store persists between process restarts (empty = pure in-process).
     memory_store_path: str = "./data/graph_store.json"
 
@@ -99,6 +104,12 @@ class Settings(BaseSettings):
     api_port: int = 8000
     cors_origins: list[str] = Field(default_factory=lambda: ["*"])
     metrics_enabled: bool = True
+
+    # --- deployment -------------------------------------------------------------------------
+    # Load the bundled mini-corpus on boot if the index is empty. A public demo URL that
+    # opens on an empty graph shows nothing; this is off by default so it can never touch
+    # an index that already has content.
+    seed_on_start: bool = False
 
     # --- eval ----------------------------------------------------------------------------
     eval_output_dir: str = "./results"

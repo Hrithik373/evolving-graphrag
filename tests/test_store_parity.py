@@ -1,17 +1,22 @@
-"""ArcadeDB must behave exactly like the in-memory store.
+"""Every store backend must behave exactly like the in-memory one.
 
 The memory backend is the semantics oracle: it is what the tests, the eval harness and the
 offline demo run against, so every claim in the report is a claim about *its* behaviour. If
 the deployed store diverges, the report describes a system nobody is running.
 
-These tests skip when ArcadeDB is unreachable, so the suite stays runnable with no daemon.
-To run them:
+Each test runs once per available backend. A backend whose server is not up is skipped, so
+the suite stays runnable with no daemon at all. To run the others:
 
-    docker compose up -d arcadedb
-    EGRAPH_ARCADEDB_URL=http://localhost:2480 pytest tests/test_store_parity.py -v
+    docker compose up -d arcadedb postgres
+    EGRAPH_ARCADEDB_URL=http://localhost:2480     EGRAPH_TEST_POSTGRES_DSN=postgresql://egraph:egraph@localhost:5432/egraph         pytest tests/test_store_parity.py -v
 
-They use a throwaway database (``egraph_parity``) and wipe it between tests, so they will
-never touch a real index.
+They use throwaway databases and wipe them between tests, so they never touch a real index.
+
+This suite has earned its keep. Running it against a live ArcadeDB for the first time found
+four bugs that no amount of reading the code would have surfaced - a DDL comment containing
+a semicolon, `DELETE VERTEX` needing a `FROM`, `LIST OF FLOAT` rejecting Python floats, and
+`ORDER BY` with an implicit projection returning one phantom row per storage bucket. The
+last would have silently corrupted the recompute queue.
 """
 
 from __future__ import annotations
@@ -28,6 +33,7 @@ from egraph.store.base import GraphStore
 from egraph.store.memory import MemoryStore
 
 ARCADE_URL = os.getenv("EGRAPH_ARCADEDB_URL", "http://localhost:2480")
+POSTGRES_DSN = os.getenv("EGRAPH_TEST_POSTGRES_DSN", "")
 DIM = 64
 
 
@@ -54,21 +60,46 @@ def _arcadedb_store():
     return store
 
 
+def _postgres_store():
+    """Build a Postgres store, or return None if no DSN is configured or it is unreachable."""
+    if not POSTGRES_DSN:
+        return None
+    try:
+        from egraph.store.postgres import PostgresStore
+
+        store = PostgresStore(POSTGRES_DSN, dim=DIM, max_size=2)
+    except Exception:  # noqa: BLE001 - an unavailable backend is a skip, not an error
+        return None
+    if not store.ping():
+        return None
+    store.migrate()
+    return store
+
+
 ARCADE = _arcadedb_store()
+POSTGRES = _postgres_store()
+
 needs_arcadedb = pytest.mark.skipif(
     ARCADE is None, reason=f"ArcadeDB not reachable at {ARCADE_URL}"
 )
+needs_postgres = pytest.mark.skipif(
+    POSTGRES is None, reason="set EGRAPH_TEST_POSTGRES_DSN to run the Postgres parity tests"
+)
 
 
-@pytest.fixture(params=["memory", "arcadedb"])
+@pytest.fixture(params=["memory", "arcadedb", "postgres"])
 def store(request) -> GraphStore:
-    """Every test in this module runs twice: once per backend."""
+    """Every test in this module runs once per backend."""
     if request.param == "memory":
         backend: GraphStore = MemoryStore(dim=DIM)
-    else:
+    elif request.param == "arcadedb":
         if ARCADE is None:
             pytest.skip(f"ArcadeDB not reachable at {ARCADE_URL}")
         backend = ARCADE
+    else:
+        if POSTGRES is None:
+            pytest.skip("set EGRAPH_TEST_POSTGRES_DSN to run the Postgres parity tests")
+        backend = POSTGRES
     backend.clear()
     yield backend
     backend.clear()

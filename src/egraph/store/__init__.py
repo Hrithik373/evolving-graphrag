@@ -14,7 +14,13 @@ log = logging.getLogger(__name__)
 
 def build_store(settings: Settings | None = None) -> GraphStore:
     cfg = settings or get_settings()
-    if cfg.store_backend == "arcadedb":
+    if cfg.store_backend == "postgres":
+        from egraph.store.postgres import PostgresStore
+
+        store: GraphStore = PostgresStore(
+            dsn=cfg.postgres_dsn, dim=cfg.embed_dim, max_size=cfg.postgres_pool_max
+        )
+    elif cfg.store_backend == "arcadedb":
         from egraph.store.arcadedb import ArcadeDBStore
         from egraph.store.client import ArcadeDBClient
 
@@ -24,7 +30,7 @@ def build_store(settings: Settings | None = None) -> GraphStore:
             user=cfg.arcadedb_user,
             password=cfg.arcadedb_password,
         )
-        store: GraphStore = ArcadeDBStore(client, dim=cfg.embed_dim)
+        store = ArcadeDBStore(client, dim=cfg.embed_dim)
     else:
         store = MemoryStore(dim=cfg.embed_dim, persist_path=cfg.memory_store_path or None)
     store.migrate()

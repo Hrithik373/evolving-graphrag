@@ -17,14 +17,11 @@ def load_schema_statements(path: Path | None = None) -> list[str]:
     if not source.exists():  # installed as a wheel without the config dir
         return []
     raw = source.read_text(encoding="utf-8")
-    statements = []
-    for chunk in raw.split(";"):
-        stmt = "\n".join(
-            line for line in chunk.splitlines() if not line.strip().startswith("--")
-        ).strip()
-        if stmt:
-            statements.append(stmt)
-    return statements
+    # Strip comments FIRST, then split on the statement terminator. Splitting first is a
+    # trap: a comment containing a semicolon gets cut in half and its tail is left looking
+    # like SQL, which the server then rejects with a parse error pointing at prose.
+    body = "\n".join(line for line in raw.splitlines() if not line.strip().startswith("--"))
+    return [stmt for chunk in body.split(";") if (stmt := chunk.strip())]
 
 
 def migrate(client: ArcadeDBClient, path: Path | None = None) -> int:

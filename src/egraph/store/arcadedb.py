@@ -36,6 +36,13 @@ log = logging.getLogger(__name__)
 
 _SYSTEM_FIELDS = {"@rid", "@type", "@cat", "@in", "@out"}
 
+# ArcadeDB quirk, found by the parity suite: `SELECT FROM T ORDER BY x` (and `SELECT *
+# FROM T ORDER BY x`) fans out across the type's buckets and returns one phantom row per
+# bucket - eight copies of a single record on an 8-bucket type. `SELECT *, @rid` happens to
+# return the right thing, but depending on that incantation is a trap. Ordering and slicing
+# are done in Python instead: the result sets that need it are small, and Python's sort is
+# deterministic, which the reproducibility guarantee needs anyway.
+
 
 def _clean(row: dict[str, Any]) -> dict[str, Any]:
     return {k: v for k, v in row.items() if k not in _SYSTEM_FIELDS}
@@ -68,7 +75,7 @@ class ArcadeDBStore(GraphStore):
         for etype in ("RELATES_TO", "MENTIONS", "IN_COMMUNITY", "PART_OF"):
             self.client.command(f"DELETE FROM {etype} UNSAFE")
         for vtype in ("Chunk", "Entity", "Community", "SourceDocument"):
-            self.client.command(f"DELETE VERTEX {vtype}")
+            self.client.command(f"DELETE VERTEX FROM {vtype}")
         for dtype in ("ResolutionDecision", "CostRecord"):
             self.client.command(f"DELETE FROM {dtype}")
         self._entity_index.clear()
@@ -165,8 +172,8 @@ class ArcadeDBStore(GraphStore):
         if status:
             sql += " WHERE status = :status"
             params["status"] = status
-        sql += " ORDER BY doc_id"
-        return [SourceDocument.model_validate(_clean(r)) for r in self.client.query(sql, params)]
+        docs = [SourceDocument.model_validate(_clean(r)) for r in self.client.query(sql, params)]
+        return sorted(docs, key=lambda d: d.doc_id)
 
     def find_document_by_hash(self, content_hash: str) -> SourceDocument | None:
         rows = self.client.query(
@@ -193,16 +200,14 @@ class ArcadeDBStore(GraphStore):
         return Chunk.model_validate(_clean(rows[0])) if rows else None
 
     def chunks_for_document(self, doc_id: str) -> list[Chunk]:
-        rows = self.client.query(
-            "SELECT FROM Chunk WHERE doc_id = :d ORDER BY position", {"d": doc_id}
-        )
-        return [Chunk.model_validate(_clean(r)) for r in rows]
+        rows = self.client.query("SELECT FROM Chunk WHERE doc_id = :d", {"d": doc_id})
+        return sorted((Chunk.model_validate(_clean(r)) for r in rows), key=lambda c: c.position)
 
     def remove_chunk(self, chunk_id: str) -> None:
         for entity in self.entities_mentioning(chunk_id):
             entity.mentions.discard(chunk_id)
             self.upsert_entity(entity)
-        self.client.command("DELETE VERTEX Chunk WHERE chunk_id = :c", {"c": chunk_id})
+        self.client.command("DELETE VERTEX FROM Chunk WHERE chunk_id = :c", {"c": chunk_id})
 
     def all_chunks(self) -> list[Chunk]:
         return [Chunk.model_validate(_clean(r)) for r in self.client.query("SELECT FROM Chunk")]
@@ -242,7 +247,7 @@ class ArcadeDBStore(GraphStore):
     def remove_entity(self, entity_id: str) -> None:
         for relation in self.relations_for_entity(entity_id):
             self.remove_relation(relation.relation_id)
-        self.client.command("DELETE VERTEX Entity WHERE entity_id = :e", {"e": entity_id})
+        self.client.command("DELETE VERTEX FROM Entity WHERE entity_id = :e", {"e": entity_id})
         self._index_generation = -1
 
     def all_entities(self) -> list[Entity]:
@@ -337,17 +342,19 @@ class ArcadeDBStore(GraphStore):
         self.client.command(
             "UPDATE Entity SET community_id = null WHERE community_id = :k", {"k": community_id}
         )
-        self.client.command("DELETE VERTEX Community WHERE community_id = :k", {"k": community_id})
+        self.client.command(
+            "DELETE VERTEX FROM Community WHERE community_id = :k", {"k": community_id}
+        )
 
     def all_communities(self) -> list[Community]:
         rows = self.client.query("SELECT FROM Community")
         return [Community.model_validate(_clean(r)) for r in rows]
 
     def dirty_communities(self, limit: int | None = None) -> list[Community]:
-        sql = "SELECT FROM Community WHERE dirty = true ORDER BY dirty_seq, community_id"
-        if limit:
-            sql += f" LIMIT {int(limit)}"
-        return [Community.model_validate(_clean(r)) for r in self.client.query(sql)]
+        rows = self.client.query("SELECT FROM Community WHERE dirty = true")
+        dirty = [Community.model_validate(_clean(r)) for r in rows]
+        dirty.sort(key=lambda c: (c.dirty_seq, c.community_id))
+        return dirty[:limit] if limit else dirty
 
     # ------------------------------------------------------------------ audit trails
     def log_resolution(self, decision: ResolutionDecision) -> None:
@@ -356,10 +363,10 @@ class ArcadeDBStore(GraphStore):
         self.client.command(f"INSERT INTO ResolutionDecision SET {fields}", data)
 
     def list_resolutions(self, limit: int = 200) -> list[ResolutionDecision]:
-        rows = self.client.query(
-            f"SELECT FROM ResolutionDecision ORDER BY at DESC LIMIT {int(limit)}"
-        )
-        return [ResolutionDecision.model_validate(_clean(r)) for r in rows]
+        rows = self.client.query("SELECT FROM ResolutionDecision")
+        decisions = [ResolutionDecision.model_validate(_clean(r)) for r in rows]
+        decisions.sort(key=lambda d: d.at)
+        return decisions[-limit:]
 
     def record_cost(self, record: CostRecord) -> None:
         data = record.model_dump(mode="json")
@@ -367,5 +374,7 @@ class ArcadeDBStore(GraphStore):
         self.client.command(f"INSERT INTO CostRecord SET {fields}", data)
 
     def list_costs(self, limit: int = 1000) -> list[CostRecord]:
-        rows = self.client.query(f"SELECT FROM CostRecord ORDER BY at DESC LIMIT {int(limit)}")
-        return [CostRecord.model_validate(_clean(r)) for r in rows]
+        rows = self.client.query("SELECT FROM CostRecord")
+        records = [CostRecord.model_validate(_clean(r)) for r in rows]
+        records.sort(key=lambda c: c.at)
+        return records[-limit:]

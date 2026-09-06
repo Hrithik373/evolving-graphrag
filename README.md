@@ -145,6 +145,13 @@ make seed             # load the mini-corpus
 make churn            # drive a live add/update/delete against the running API
 ```
 
+### Deploying it
+
+`DEPLOY.md` covers both shapes. The short version: one container plus a free managed
+Postgres gives you a public URL for nothing (`render.yaml` is ready to apply), while the
+full stack — the one that actually demonstrates the async write path — wants a small VPS
+and the Compose file above.
+
 | service | url |
 |---|---|
 | console (frontend) | http://localhost:5173 |
@@ -214,7 +221,7 @@ with entities nobody can trace back to real prose.
 ```
 src/egraph/
 ├── schemas/      Pydantic contracts — the spine
-├── store/        GraphStore ABC + memory and ArcadeDB backends, provenance-aware ops
+├── store/        GraphStore ABC + memory, Postgres and ArcadeDB backends
 ├── ingest/       intake, content-addressed chunking, entity resolution ★
 ├── extract/      LLM extraction + content-hash cache
 ├── churn/        ★ THE CONTRIBUTION ★ engine · diff · mutations · dirty · gc · compact
@@ -270,6 +277,13 @@ asserted by tests:
   stale-answer rate, update cost, communities recomputed — are backend-independent, and
   those are the project's claims. Run with `EGRAPH_LLM_BACKEND=anthropic` for quality
   numbers.
+- **Three store backends, one contract.** `memory` is the semantics oracle,
+  `postgres` is the deployable one, `arcadedb` is the graph-native one.
+  `tests/test_store_parity.py` runs every test once per backend, and running it against a
+  live ArcadeDB for the first time found four real bugs — a DDL comment containing a
+  semicolon, `DELETE VERTEX` needing a `FROM`, `LIST OF FLOAT` rejecting Python floats, and
+  `ORDER BY` with an implicit projection returning one phantom row per storage bucket. The
+  last would have silently corrupted the recompute queue.
 - **ArcadeDB's HNSW index is not reachable from SQL**, so entity vector search loads
   embeddings into an in-process matrix and scores with numpy, refreshing when the entity
   generation changes. At this project's corpus sizes that is microseconds and exactly

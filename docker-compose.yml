@@ -51,6 +51,27 @@ services:
       start_period: 30s
     restart: unless-stopped
 
+  # Not used by the Compose stack itself (that runs on ArcadeDB) - this is here so the
+  # store parity suite can be run against a real Postgres, and so the deployable backend
+  # can be exercised locally exactly as it runs in production.
+  postgres:
+    image: postgres:16-alpine
+    container_name: egraph-postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-egraph}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-egraph}
+      POSTGRES_DB: ${POSTGRES_DB:-egraph}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-egraph}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+
   redis:
     image: redis:7-alpine
     container_name: egraph-redis
@@ -159,6 +180,7 @@ services:
 
 volumes:
   arcadedb-data:
+  postgres-data:
   redis-data:
   prom-data:
   grafana-data:

@@ -60,6 +60,16 @@ jobs:
           JAVA_OPTS: >-
             -Darcadedb.server.rootPassword=playwithdata
             -Darcadedb.server.defaultDatabases=egraph_parity[root]
+      postgres:
+        image: postgres:16-alpine
+        ports: ["5432:5432"]
+        env:
+          POSTGRES_USER: egraph
+          POSTGRES_PASSWORD: egraph
+          POSTGRES_DB: egraph
+        options: >-
+          --health-cmd "pg_isready -U egraph"
+          --health-interval 5s --health-timeout 3s --health-retries 10
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -74,10 +84,11 @@ jobs:
             sleep 2
           done
           echo "ArcadeDB did not come up" && exit 1
-      - name: ArcadeDB must match the memory store
+      - name: every backend must match the memory store
         env:
           EGRAPH_ARCADEDB_URL: http://localhost:2480
           EGRAPH_ARCADEDB_PASSWORD: playwithdata
+          EGRAPH_TEST_POSTGRES_DSN: postgresql://egraph:egraph@localhost:5432/egraph
         run: pytest tests/test_store_parity.py -v
 
   frontend:
@@ -104,4 +115,5 @@ jobs:
         run: |
           docker build --target api -t egraph-api .
           docker build --target worker -t egraph-worker .
+          docker build --target demo -t egraph-demo .
           docker build -t egraph-frontend ./frontend

@@ -56,7 +56,20 @@ stamped with a `config_hash`. `make eval` regenerates every table and figure fro
 - `EGRAPH_LLM_BACKEND=mock` is a real rule-based extractor/summariser/answerer, not a stub.
   It exists so the churn semantics are provable in CI with no API key and no GPU. When you
   change extraction behaviour, change it there too or the tests stop meaning anything.
-- `EGRAPH_STORE_BACKEND=memory` is the semantics oracle; `arcadedb` must behave identically.
+- `EGRAPH_STORE_BACKEND=memory` is the semantics oracle. `postgres` and `arcadedb` must
+  behave identically to it and to each other; `tests/test_store_parity.py` runs every test
+  once per backend and is the only thing standing between the report and a system nobody is
+  running. Adding a store method means adding it to all three.
+- **Postgres is the deployable backend.** ArcadeDB is the only component with no managed
+  offering, so a deployment that needs to be cheap or free runs on Postgres. It is not a
+  downgrade: the provenance walk is an array-containment query against a GIN index, so
+  retraction is an index scan.
+- **SQL schema files: strip comments before splitting on `;`.** A comment containing a
+  semicolon gets cut in half and its tail parsed as SQL. This actually happened.
+- **ArcadeDB: never `ORDER BY` with an implicit projection.** `SELECT FROM T ORDER BY x`
+  returns one phantom row per storage bucket. Sort in Python instead — the result sets that
+  need ordering are small, and Python's sort is deterministic, which reproducibility needs
+  anyway.
 - Compaction prefers `leidenalg`; the pure-Python Louvain in `cluster/louvain.py` is the
   fallback. Label propagation is kept for the ablation only — on a small dense graph it
   collapses everything into one community, which would make compaction destructive.

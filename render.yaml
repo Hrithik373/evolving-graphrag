@@ -1,0 +1,74 @@
+# Render blueprint — the single-service demo deployment.
+#
+# One web service (API + console in one container) and one managed Postgres. Both fit
+# Render's free tier, so this costs nothing to stand up.
+#
+#   Render dashboard → New → Blueprint → connect this repo → Apply
+#
+# WHAT THIS DEPLOYS, AND WHAT IT DOES NOT
+#
+# This is the *demo-lite* shape. It proves the system works and gives you a public URL to
+# click around, but it does not demonstrate the architecture the project is actually about:
+# with no worker service there is no queue, so extraction runs inline on the request rather
+# than in a background worker, and the asynchronous write path — the thing the whole design
+# exists for — is not exercised. `docker compose up` is the configuration that demonstrates
+# it. That honesty matters more than a green tick on a deploy page.
+#
+# What it does keep: real persistence, the full provenance/GC semantics, selective
+# recompute, and every invariant the test suite checks. The Postgres backend is validated
+# against the same parity suite as the in-memory store.
+#
+# The build uses the last stage of ./Dockerfile, which is `demo` on purpose — Docker builds
+# the final stage when no target is given, which is what every PaaS does.
+
+databases:
+  - name: egraph-db
+    databaseName: egraph
+    user: egraph
+    plan: free
+    # Free Postgres on Render expires after 30 days. For anything long-lived, move this to
+    # a paid plan or point EGRAPH_POSTGRES_DSN at Neon or Supabase instead.
+
+services:
+  - type: web
+    name: egraph
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    plan: free
+    region: oregon
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      # Render injects PORT; the container binds whatever it is given.
+      - key: EGRAPH_POSTGRES_DSN
+        fromDatabase:
+          name: egraph-db
+          property: connectionString
+      - key: EGRAPH_STORE_BACKEND
+        value: postgres
+      # No worker service on the free tier, so jobs run inline. See the note above.
+      - key: EGRAPH_QUEUE_BACKEND
+        value: inline
+      # The deterministic offline extractor: no API key, no cost, and the churn semantics
+      # are identical. Set this to `anthropic` and add ANTHROPIC_API_KEY for real quality —
+      # but note that with an inline queue a write then blocks on the model.
+      - key: EGRAPH_LLM_BACKEND
+        value: mock
+      - key: EGRAPH_EMBED_BACKEND
+        value: hash
+      # Load the mini-corpus on first boot so the URL does not open on an empty graph.
+      # Guarded on the index being empty, so a redeploy never overwrites uploads.
+      - key: EGRAPH_SEED_ON_START
+        value: "true"
+      - key: EGRAPH_SEED
+        value: "1337"
+      # Same-origin console, so no cross-origin exemption is needed.
+      - key: EGRAPH_CORS_ORIGINS
+        value: '["*"]'
+      # Free instances sleep after inactivity and cold-start on the next request. Keep the
+      # pool small so a wake-up does not open more connections than free Postgres allows.
+      - key: EGRAPH_POSTGRES_POOL_MAX
+        value: "3"
+      - key: ANTHROPIC_API_KEY
+        sync: false # set in the dashboard if you switch EGRAPH_LLM_BACKEND to anthropic
