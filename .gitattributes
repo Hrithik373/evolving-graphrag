@@ -1,0 +1,15 @@
+# Normalise line endings in the repository so a Windows checkout does not show every file
+# as modified, and so CI (Linux) and local runs see identical content.
+* text=auto eol=lf
+
+# Binary-ish assets git should never try to diff or convert.
+*.png binary
+*.jpg binary
+*.pdf binary
+*.ico binary
+
+# Generated lockfile: keep it in the repo, keep it out of diffs.
+frontend/package-lock.json linguist-generated=true -diff
+
+# The notebook is a deliverable, but its diffs are unreadable.
+*.ipynb linguist-language=Python -diff

@@ -1,0 +1,17 @@
+.venv/
+venv/
+node_modules/
+frontend/node_modules/
+frontend/dist/
+__pycache__/
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.hypothesis/
+.git/
+data/
+backups/
+results/
+notebooks/
+.env

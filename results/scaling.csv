@@ -1,0 +1,5 @@
+copies,documents,entities,relations,communities,chunks,build_tokens,one_update_tokens,one_update_wall_ms,one_update_communities_recomputed,reindex_cost_ratio
+1,5,20,38,9,12,14995,2491,4.16,3,6.02
+2,10,37,75,15,27,33209,2495,4.34,3,13.31
+4,20,71,149,33,56,70005,2499,4.62,3,28.01
+8,40,137,295,56,114,148122,2503,5.08,3,59.18

@@ -1,0 +1,430 @@
+{
+  "uid": "egraph-maintenance",
+  "title": "evolving-graphrag :: index maintenance",
+  "tags": ["evolving-graphrag", "graphrag", "freshness"],
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "5s",
+  "editable": true,
+  "time": { "from": "now-15m", "to": "now" },
+  "templating": { "list": [] },
+  "annotations": { "list": [] },
+  "panels": [
+    {
+      "type": "row",
+      "title": "Freshness — the demo watches this row",
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 0 },
+      "collapsed": false,
+      "panels": []
+    },
+    {
+      "id": 1,
+      "type": "stat",
+      "title": "Dirty communities",
+      "description": "Community summaries waiting to catch up with the graph. Add or delete a document and this spikes, then drains as the worker recomputes ONLY these.",
+      "gridPos": { "h": 6, "w": 5, "x": 0, "y": 1 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [
+        { "refId": "A", "expr": "max(egraph_dirty_communities)", "legendFormat": "dirty" }
+      ],
+      "options": {
+        "graphMode": "area",
+        "colorMode": "value",
+        "textMode": "auto",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "decimals": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "#0ca30c", "value": null },
+              { "color": "#fab219", "value": 1 },
+              { "color": "#ec835a", "value": 8 },
+              { "color": "#d03b3b", "value": 20 }
+            ]
+          }
+        },
+        "overrides": []
+      }
+    },
+    {
+      "id": 2,
+      "type": "gauge",
+      "title": "Dirty fraction",
+      "description": "Dirty communities / total. The staleness the /index/staleness endpoint reports.",
+      "gridPos": { "h": 6, "w": 5, "x": 5, "y": 1 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [
+        { "refId": "A", "expr": "max(egraph_dirty_fraction)", "legendFormat": "dirty fraction" }
+      ],
+      "options": {
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "min": 0,
+          "max": 1,
+          "decimals": 2,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "#0ca30c", "value": null },
+              { "color": "#fab219", "value": 0.2 },
+              { "color": "#d03b3b", "value": 0.6 }
+            ]
+          }
+        },
+        "overrides": []
+      }
+    },
+    {
+      "id": 3,
+      "type": "timeseries",
+      "title": "Staleness over time",
+      "description": "The spike-and-drain signature of selective recompute. A full reindex would show one flat line at the total.",
+      "gridPos": { "h": 6, "w": 14, "x": 10, "y": 1 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [
+        { "refId": "A", "expr": "max(egraph_dirty_communities)", "legendFormat": "dirty" },
+        { "refId": "B", "expr": "max(egraph_index_communities)", "legendFormat": "total communities" }
+      ],
+      "options": {
+        "legend": { "displayMode": "list", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "multi", "sort": "none" }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "decimals": 0,
+          "min": 0,
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 12,
+            "pointSize": 8,
+            "showPoints": "never",
+            "spanNulls": true,
+            "axisLabel": "communities"
+          }
+        },
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "dirty" },
+            "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "#2a78d6" } }]
+          },
+          {
+            "matcher": { "id": "byName", "options": "total communities" },
+            "properties": [
+              { "id": "color", "value": { "mode": "fixed", "fixedColor": "#eb6834" } },
+              { "id": "custom.fillOpacity", "value": 0 }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "type": "row",
+      "title": "Write path — the fast-path claim",
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 7 },
+      "collapsed": false,
+      "panels": []
+    },
+    {
+      "id": 4,
+      "type": "timeseries",
+      "title": "Synchronous write latency",
+      "description": "How long a POST/PUT/DELETE blocks the caller. Extraction and summarisation are not in here — they are in the worker.",
+      "gridPos": { "h": 7, "w": 12, "x": 0, "y": 8 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "histogram_quantile(0.50, sum by (le) (rate(egraph_update_latency_ms_bucket[1m])))",
+          "legendFormat": "p50"
+        },
+        {
+          "refId": "B",
+          "expr": "histogram_quantile(0.95, sum by (le) (rate(egraph_update_latency_ms_bucket[1m])))",
+          "legendFormat": "p95"
+        }
+      ],
+      "options": {
+        "legend": { "displayMode": "list", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "multi", "sort": "none" }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ms",
+          "min": 0,
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 0,
+            "showPoints": "never",
+            "axisLabel": "ms"
+          }
+        },
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "p50" },
+            "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "#2a78d6" } }]
+          },
+          {
+            "matcher": { "id": "byName", "options": "p95" },
+            "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "#eb6834" } }]
+          }
+        ]
+      }
+    },
+    {
+      "id": 5,
+      "type": "timeseries",
+      "title": "Summaries recomputed vs left alone",
+      "description": "The selectivity claim, measured. 'recomputed' should stay far below 'skipped' — if they converge, a single-document change is behaving like a rebuild.",
+      "gridPos": { "h": 7, "w": 12, "x": 12, "y": 8 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(increase(egraph_summary_recompute_total[5m]))",
+          "legendFormat": "recomputed"
+        },
+        {
+          "refId": "B",
+          "expr": "sum(increase(egraph_summary_skipped_total[5m]))",
+          "legendFormat": "left clean"
+        }
+      ],
+      "options": {
+        "legend": { "displayMode": "list", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "multi", "sort": "none" }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "min": 0,
+          "custom": {
+            "drawStyle": "bars",
+            "lineWidth": 1,
+            "fillOpacity": 70,
+            "barAlignment": 0,
+            "axisLabel": "summaries / 5m"
+          }
+        },
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "recomputed" },
+            "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "#2a78d6" } }]
+          },
+          {
+            "matcher": { "id": "byName", "options": "left clean" },
+            "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "#1baf7a" } }]
+          }
+        ]
+      }
+    },
+    {
+      "type": "row",
+      "title": "Cost",
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 15 },
+      "collapsed": false,
+      "panels": []
+    },
+    {
+      "id": 6,
+      "type": "timeseries",
+      "title": "Tokens by operation",
+      "description": "The cost axis of the Pareto curve, live. Every model call is metered by CostMeter — nothing reaches a model without landing here.",
+      "gridPos": { "h": 7, "w": 12, "x": 0, "y": 16 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by (op) (increase(egraph_llm_tokens_total[5m]))",
+          "legendFormat": "{{op}}"
+        }
+      ],
+      "options": {
+        "legend": { "displayMode": "list", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "multi", "sort": "desc" }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "min": 0,
+          "custom": {
+            "drawStyle": "bars",
+            "lineWidth": 1,
+            "fillOpacity": 70,
+            "stacking": { "mode": "normal", "group": "A" },
+            "axisLabel": "tokens / 5m"
+          }
+        },
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "extract" },
+            "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "#2a78d6" } }]
+          },
+          {
+            "matcher": { "id": "byName", "options": "summarize" },
+            "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "#eb6834" } }]
+          },
+          {
+            "matcher": { "id": "byName", "options": "embed" },
+            "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "#1baf7a" } }]
+          },
+          {
+            "matcher": { "id": "byName", "options": "answer" },
+            "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "#eda100" } }]
+          }
+        ]
+      }
+    },
+    {
+      "id": 7,
+      "type": "stat",
+      "title": "Extraction cache hit rate",
+      "description": "Under churn an edited document re-chunks to mostly the same chunks. Every hit here is an extraction that was not paid for twice.",
+      "gridPos": { "h": 7, "w": 6, "x": 12, "y": 16 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(egraph_extraction_cache_total{result=\"hit\"}) / clamp_min(sum(egraph_extraction_cache_total), 1)",
+          "legendFormat": "hit rate"
+        }
+      ],
+      "options": {
+        "graphMode": "area",
+        "colorMode": "value",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "min": 0,
+          "max": 1,
+          "decimals": 2,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "#898781", "value": null },
+              { "color": "#0ca30c", "value": 0.2 }
+            ]
+          }
+        },
+        "overrides": []
+      }
+    },
+    {
+      "id": 8,
+      "type": "stat",
+      "title": "Spend to date",
+      "description": "USD across every metered call, priced from the configured per-MTok rates.",
+      "gridPos": { "h": 7, "w": 6, "x": 18, "y": 16 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [
+        { "refId": "A", "expr": "sum(egraph_llm_usd_total)", "legendFormat": "usd" }
+      ],
+      "options": {
+        "graphMode": "area",
+        "colorMode": "none",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }
+      },
+      "fieldConfig": {
+        "defaults": { "unit": "currencyUSD", "decimals": 4 },
+        "overrides": []
+      }
+    },
+    {
+      "type": "row",
+      "title": "Index size and queue",
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 23 },
+      "collapsed": false,
+      "panels": []
+    },
+    {
+      "id": 9,
+      "type": "timeseries",
+      "title": "Index size",
+      "description": "Memory growth vs corpus size. Deletions should visibly pull these down — an append-only index never would.",
+      "gridPos": { "h": 7, "w": 16, "x": 0, "y": 24 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [
+        { "refId": "A", "expr": "max(egraph_index_entities)", "legendFormat": "entities" },
+        { "refId": "B", "expr": "max(egraph_index_relations)", "legendFormat": "relations" },
+        { "refId": "C", "expr": "max(egraph_index_communities)", "legendFormat": "communities" }
+      ],
+      "options": {
+        "legend": { "displayMode": "list", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "multi", "sort": "none" }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "min": 0,
+          "decimals": 0,
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 0,
+            "showPoints": "never",
+            "axisLabel": "count"
+          }
+        },
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "entities" },
+            "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "#2a78d6" } }]
+          },
+          {
+            "matcher": { "id": "byName", "options": "relations" },
+            "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "#eb6834" } }]
+          },
+          {
+            "matcher": { "id": "byName", "options": "communities" },
+            "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "#1baf7a" } }]
+          }
+        ]
+      }
+    },
+    {
+      "id": 10,
+      "type": "timeseries",
+      "title": "Worker queue depth",
+      "description": "Backpressure signal. Enqueue is refused past the configured cap so a bulk ingest cannot bury the workers.",
+      "gridPos": { "h": 7, "w": 8, "x": 16, "y": 24 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [
+        { "refId": "A", "expr": "max(egraph_queue_depth)", "legendFormat": "queued jobs" }
+      ],
+      "options": {
+        "legend": { "displayMode": "list", "placement": "bottom", "showLegend": false },
+        "tooltip": { "mode": "single", "sort": "none" }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "min": 0,
+          "decimals": 0,
+          "color": { "mode": "fixed", "fixedColor": "#2a78d6" },
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 15,
+            "showPoints": "never",
+            "axisLabel": "jobs"
+          }
+        },
+        "overrides": []
+      }
+    }
+  ]
+}

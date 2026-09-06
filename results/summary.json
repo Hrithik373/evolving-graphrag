@@ -1,0 +1,2819 @@
+{
+  "config_hash": "8b1da1efb99381b1",
+  "seed": 1337,
+  "version": "0.1.0",
+  "wall_s": 2.22,
+  "benchmark": {
+    "base_docs": 5,
+    "updated_docs": 2,
+    "new_docs": 2,
+    "deleted_docs": 2,
+    "base_questions": 6,
+    "new_questions": 5,
+    "deletion_questions": 6,
+    "surviving_questions": 3
+  },
+  "environment": {
+    "python": "3.12.10",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "store_backend": "memory",
+    "llm_backend": "mock",
+    "llm_model": "claude-opus-5",
+    "embed_backend": "hash",
+    "cluster_backend": "leiden"
+  },
+  "scenarios": [
+    {
+      "system": "evolving",
+      "scenario": "base-on-base",
+      "n": 6,
+      "f1": 0.4334,
+      "em": 0.0,
+      "recall": 0.8333,
+      "stale_answer_rate": 0.0,
+      "abstention_rate": 0.0,
+      "update_cost": {
+        "tokens": 14995,
+        "wall_ms": 31.73,
+        "usd": 0.157221,
+        "communities_recomputed": 16,
+        "changes": 5,
+        "tokens_per_change": 2999.0
+      },
+      "index": {
+        "entities": 19,
+        "relations": 37,
+        "communities": 9,
+        "chunks": 12,
+        "active_documents": 5
+      },
+      "staleness": {
+        "dirty_count": 0,
+        "community_count": 9,
+        "dirty_fraction": 0.0,
+        "oldest_dirty_age_s": 0.0,
+        "queue_depth": 0
+      },
+      "per_question": [
+        {
+          "question": "Who founded Helios Labs?",
+          "prediction": "Trondheim Institute (organization): Helios Labs was founded by Marit Solberg in 2019 as a spin-out of the Trondheim Institute. Marit Solberg (person): Helios Labs was founded by Marit Solberg in 2019 as a spin-out of the Trondheim Institute.",
+          "reference": "Marit Solberg founded Helios Labs in 2019.",
+          "f1": 0.3415,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "helios-overview",
+            "kestrel-systems",
+            "fjord-protocol",
+            "aurora-engine",
+            "northwind"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Which protocol does Aurora Engine use for replication between clusters?",
+          "prediction": "Aurora Engine is a streaming graph database built for continuous analytical queries. Aurora Engine was released in 2021 by Helios Labs after two years of internal development. Aurora Engine uses the Fjord Protocol for replication between clusters. The Fjord Protocol gives Aurora Engine strong consistency across regions.",
+          "reference": "Aurora Engine uses the Fjord Protocol for replication between clusters.",
+          "f1": 0.3396,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "aurora-engine",
+            "northwind",
+            "helios-overview",
+            "fjord-protocol",
+            "kestrel-systems"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Which protocol did the Fjord Protocol replace?",
+          "prediction": "Sable Protocol (technology): The Fjord Protocol replaced the older Sable Protocol in 2022.",
+          "reference": "The Fjord Protocol replaced the Sable Protocol.",
+          "f1": 0.625,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "aurora-engine",
+            "helios-overview",
+            "fjord-protocol",
+            "kestrel-systems",
+            "northwind"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Where is Northwind Analytics headquartered?",
+          "prediction": "Rotterdam (concept): Northwind Analytics is headquartered in Rotterdam and runs Aurora Engine on three clusters.",
+          "reference": "Northwind Analytics is headquartered in Rotterdam.",
+          "f1": 0.5714,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "northwind",
+            "aurora-engine",
+            "kestrel-systems",
+            "helios-overview",
+            "fjord-protocol"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Which company develops Aurora Engine?",
+          "prediction": "Northwind Analytics (concept): Northwind Analytics deployed Aurora Engine for its fraud detection platform in 2022. Rotterdam (concept): Northwind Analytics is headquartered in Rotterdam and runs Aurora Engine on three clusters.",
+          "reference": "Helios Labs develops Aurora Engine.",
+          "f1": 0.1143,
+          "recall": 0.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "northwind",
+            "aurora-engine",
+            "helios-overview",
+            "fjord-protocol",
+            "kestrel-systems"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "What is the name of the query language exposed by Aurora Engine?",
+          "prediction": "Aurora Engine exposes a query language called Lumen. Lumen was designed by the systems group at Helios Labs.",
+          "reference": "Aurora Engine exposes a query language called Lumen.",
+          "f1": 0.6087,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "aurora-engine",
+            "northwind",
+            "helios-overview",
+            "fjord-protocol",
+            "kestrel-systems"
+          ],
+          "stale_communities_touched": 0
+        }
+      ]
+    },
+    {
+      "system": "evolving",
+      "scenario": "base-on-updated",
+      "n": 6,
+      "f1": 0.4334,
+      "em": 0.0,
+      "recall": 0.8333,
+      "stale_answer_rate": 0.0,
+      "abstention_rate": 0.0,
+      "update_cost": {
+        "tokens": 12281,
+        "wall_ms": 23.98,
+        "usd": 0.125403,
+        "communities_recomputed": 14,
+        "changes": 4,
+        "tokens_per_change": 3070.2
+      },
+      "index": {
+        "entities": 27,
+        "relations": 53,
+        "communities": 11,
+        "chunks": 16,
+        "active_documents": 7
+      },
+      "staleness": {
+        "dirty_count": 0,
+        "community_count": 11,
+        "dirty_fraction": 0.0,
+        "oldest_dirty_age_s": 0.0,
+        "queue_depth": 0
+      },
+      "per_question": [
+        {
+          "question": "Who founded Helios Labs?",
+          "prediction": "Trondheim Institute (organization): Helios Labs was founded by Marit Solberg in 2019 as a spin-out of the Trondheim Institute. Marit Solberg (person): Helios Labs was founded by Marit Solberg in 2019 as a spin-out of the Trondheim Institute.",
+          "reference": "Marit Solberg founded Helios Labs in 2019.",
+          "f1": 0.3415,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "helios-overview",
+            "meridian-project",
+            "fjord-protocol",
+            "aurora-engine",
+            "northwind",
+            "kestrel-systems",
+            "vantage-robotics"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Which protocol does Aurora Engine use for replication between clusters?",
+          "prediction": "Aurora Engine is a streaming graph database built for continuous analytical queries. Aurora Engine was released in 2021 by Helios Labs after two years of internal development. Aurora Engine uses the Fjord Protocol for replication between clusters. The Fjord Protocol gives Aurora Engine strong consistency across regions.",
+          "reference": "Aurora Engine uses the Fjord Protocol for replication between clusters.",
+          "f1": 0.3396,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "aurora-engine",
+            "northwind",
+            "helios-overview",
+            "kestrel-systems",
+            "meridian-project",
+            "fjord-protocol",
+            "vantage-robotics"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Which protocol did the Fjord Protocol replace?",
+          "prediction": "Sable Protocol (technology): The Fjord Protocol replaced the older Sable Protocol in 2022.",
+          "reference": "The Fjord Protocol replaced the Sable Protocol.",
+          "f1": 0.625,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "kestrel-systems",
+            "meridian-project",
+            "vantage-robotics",
+            "aurora-engine",
+            "fjord-protocol",
+            "helios-overview"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Where is Northwind Analytics headquartered?",
+          "prediction": "Rotterdam (concept): Northwind Analytics is headquartered in Rotterdam and runs Aurora Engine on three clusters.",
+          "reference": "Northwind Analytics is headquartered in Rotterdam.",
+          "f1": 0.5714,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "northwind",
+            "aurora-engine",
+            "vantage-robotics",
+            "helios-overview",
+            "kestrel-systems"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Which company develops Aurora Engine?",
+          "prediction": "Northwind Analytics (concept): Northwind Analytics deployed Aurora Engine for its fraud detection platform in 2022. Rotterdam (concept): Northwind Analytics is headquartered in Rotterdam and runs Aurora Engine on three clusters.",
+          "reference": "Helios Labs develops Aurora Engine.",
+          "f1": 0.1143,
+          "recall": 0.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "northwind",
+            "aurora-engine",
+            "helios-overview",
+            "kestrel-systems",
+            "vantage-robotics"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "What is the name of the query language exposed by Aurora Engine?",
+          "prediction": "Aurora Engine exposes a query language called Lumen. Lumen was designed by the systems group at Helios Labs.",
+          "reference": "Aurora Engine exposes a query language called Lumen.",
+          "f1": 0.6087,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "helios-overview",
+            "aurora-engine",
+            "northwind",
+            "kestrel-systems",
+            "fjord-protocol",
+            "meridian-project"
+          ],
+          "stale_communities_touched": 0
+        }
+      ]
+    },
+    {
+      "system": "evolving",
+      "scenario": "new-on-updated",
+      "n": 5,
+      "f1": 0.6282,
+      "em": 0.0,
+      "recall": 1.0,
+      "stale_answer_rate": 0.0,
+      "abstention_rate": 0.0,
+      "update_cost": {
+        "tokens": 12281,
+        "wall_ms": 23.98,
+        "usd": 0.125403,
+        "communities_recomputed": 14,
+        "changes": 4,
+        "tokens_per_change": 3070.2
+      },
+      "index": {
+        "entities": 27,
+        "relations": 53,
+        "communities": 11,
+        "chunks": 16,
+        "active_documents": 7
+      },
+      "staleness": {
+        "dirty_count": 0,
+        "community_count": 11,
+        "dirty_fraction": 0.0,
+        "oldest_dirty_age_s": 0.0,
+        "queue_depth": 0
+      },
+      "per_question": [
+        {
+          "question": "Who leads the platform team at Northwind Analytics?",
+          "prediction": "Sofia Almeida (person): Sofia Almeida leads the platform team at Northwind Analytics.",
+          "reference": "Sofia Almeida leads the platform team at Northwind Analytics.",
+          "f1": 0.8421,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "northwind",
+            "aurora-engine",
+            "kestrel-systems",
+            "vantage-robotics",
+            "helios-overview"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Which protocol did Kestrel Systems adopt across its edge fleet in 2024?",
+          "prediction": "Tundra Protocol (technology): In 2024 Kestrel Systems replaced the Fjord Protocol with the Tundra Protocol across its edge fleet.",
+          "reference": "Kestrel Systems replaced the Fjord Protocol with the Tundra Protocol.",
+          "f1": 0.64,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "kestrel-systems",
+            "vantage-robotics",
+            "meridian-project",
+            "fjord-protocol",
+            "helios-overview",
+            "aurora-engine"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Who co-leads the Meridian project?",
+          "prediction": "Ines Duarte (concept): Ines Duarte co-leads the Meridian project on behalf of Kestrel Systems.",
+          "reference": "Ines Duarte co-leads the Meridian project.",
+          "f1": 0.5556,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "kestrel-systems",
+            "meridian-project",
+            "helios-overview",
+            "fjord-protocol",
+            "vantage-robotics",
+            "aurora-engine"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Which company builds autonomous inspection drones in Bilbao?",
+          "prediction": "Bilbao (concept): Vantage Robotics builds autonomous inspection drones in Bilbao.",
+          "reference": "Vantage Robotics builds autonomous inspection drones in Bilbao.",
+          "f1": 0.8889,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "helios-overview",
+            "kestrel-systems",
+            "vantage-robotics",
+            "meridian-project",
+            "aurora-engine",
+            "fjord-protocol",
+            "northwind"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Who founded Vantage Robotics?",
+          "prediction": "Bilbao (concept): Vantage Robotics builds autonomous inspection drones in Bilbao. Vantage Robotics and related entities: This community covers 4 entities, centred on Vantage Robotics, Tundra Protocol, Nuria Castell. Recorded relations: Vantage Robotics --founded--> Nuria Castell; Nuria Castell --leads--> Vantage Robotics; Vantage Robotics --develops--> Bilbao; Vantage Robotics --uses--> Tundra Pro",
+          "reference": "Nuria Castell founded Vantage Robotics in 2020.",
+          "f1": 0.2143,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "vantage-robotics",
+            "kestrel-systems",
+            "northwind",
+            "aurora-engine",
+            "meridian-project",
+            "helios-overview",
+            "fjord-protocol"
+          ],
+          "stale_communities_touched": 0
+        }
+      ]
+    },
+    {
+      "system": "evolving",
+      "scenario": "deletion",
+      "n": 6,
+      "f1": 0.1667,
+      "em": 0.1667,
+      "recall": 1.0,
+      "stale_answer_rate": 0.0,
+      "abstention_rate": 0.1667,
+      "update_cost": {
+        "tokens": 2705,
+        "wall_ms": 3.55,
+        "usd": 0.020904,
+        "communities_recomputed": 5,
+        "changes": 2,
+        "tokens_per_change": 1352.5
+      },
+      "index": {
+        "entities": 18,
+        "relations": 37,
+        "communities": 7,
+        "chunks": 12,
+        "active_documents": 5
+      },
+      "staleness": {
+        "dirty_count": 0,
+        "community_count": 7,
+        "dirty_fraction": 0.0,
+        "oldest_dirty_age_s": 0.0,
+        "queue_depth": 0
+      },
+      "per_question": [
+        {
+          "question": "Which city did Kestrel Systems relocate to?",
+          "prediction": "Kestrel Systems (concept): The Meridian project is a joint effort between Helios Labs and Kestrel Systems. Ines Duarte (concept): Ines Duarte co-leads the Meridian project on behalf of Kestrel Systems.",
+          "reference": "The indexed sources do not contain this information.",
+          "f1": 0.0,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "meridian-project",
+            "helios-overview",
+            "vantage-robotics",
+            "fjord-protocol",
+            "aurora-engine"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Who founded Northwind Analytics?",
+          "prediction": "Nuria Castell (person): Nuria Castell previously worked at Northwind Analytics.",
+          "reference": "The indexed sources do not contain this information.",
+          "f1": 0.0,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "aurora-engine",
+            "vantage-robotics",
+            "helios-overview",
+            "fjord-protocol",
+            "meridian-project"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Which internal risk model does Northwind Analytics maintain?",
+          "prediction": "Nuria Castell (person): Nuria Castell previously worked at Northwind Analytics.",
+          "reference": "The indexed sources do not contain this information.",
+          "f1": 0.0,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "aurora-engine",
+            "vantage-robotics",
+            "helios-overview",
+            "meridian-project",
+            "fjord-protocol"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Which edge appliance did Kestrel Systems discontinue in 2024?",
+          "prediction": "The indexed sources do not contain this information.",
+          "reference": "The indexed sources do not contain this information.",
+          "f1": 1.0,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": true,
+          "citations": [
+            "meridian-project",
+            "vantage-robotics",
+            "helios-overview",
+            "fjord-protocol",
+            "aurora-engine"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Who leads the platform team at Northwind Analytics?",
+          "prediction": "Northwind Analytics (concept): Northwind Analytics deployed Aurora Engine for its fraud detection platform in 2022.",
+          "reference": "The indexed sources do not contain this information.",
+          "f1": 0.0,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "aurora-engine",
+            "helios-overview",
+            "vantage-robotics",
+            "fjord-protocol",
+            "meridian-project"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Which appliance replaced the Harrier gateway at Kestrel Systems?",
+          "prediction": "Kestrel Systems (concept): The Meridian project is a joint effort between Helios Labs and Kestrel Systems. Meridian (concept): The Meridian project is a joint effort between Helios Labs and Kestrel Systems.",
+          "reference": "The indexed sources do not contain this information.",
+          "f1": 0.0,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "vantage-robotics",
+            "meridian-project",
+            "helios-overview",
+            "fjord-protocol",
+            "aurora-engine"
+          ],
+          "stale_communities_touched": 0
+        }
+      ]
+    },
+    {
+      "system": "evolving",
+      "scenario": "deletion-survivors",
+      "n": 3,
+      "f1": 0.3618,
+      "em": 0.0,
+      "recall": 1.0,
+      "stale_answer_rate": 0.0,
+      "abstention_rate": 0.0,
+      "update_cost": {
+        "tokens": 2705,
+        "wall_ms": 3.55,
+        "usd": 0.020904,
+        "communities_recomputed": 5,
+        "changes": 2,
+        "tokens_per_change": 1352.5
+      },
+      "index": {
+        "entities": 18,
+        "relations": 37,
+        "communities": 7,
+        "chunks": 12,
+        "active_documents": 5
+      },
+      "staleness": {
+        "dirty_count": 0,
+        "community_count": 7,
+        "dirty_fraction": 0.0,
+        "oldest_dirty_age_s": 0.0,
+        "queue_depth": 0
+      },
+      "per_question": [
+        {
+          "question": "Which protocol does Aurora Engine use for replication between clusters?",
+          "prediction": "Aurora Engine is a streaming graph database built for continuous analytical queries. Aurora Engine was released in 2021 by Helios Labs after two years of internal development. Aurora Engine uses the Fjord Protocol for replication between clusters. The Fjord Protocol gives Aurora Engine strong consistency across regions.",
+          "reference": "Aurora Engine uses the Fjord Protocol.",
+          "f1": 0.2041,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "aurora-engine",
+            "helios-overview",
+            "meridian-project",
+            "fjord-protocol",
+            "vantage-robotics"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Who founded Helios Labs?",
+          "prediction": "Trondheim Institute (organization): Helios Labs was founded by Marit Solberg in 2019 as a spin-out of the Trondheim Institute. Marit Solberg (person): Helios Labs was founded by Marit Solberg in 2019 as a spin-out of the Trondheim Institute.",
+          "reference": "Marit Solberg founded Helios Labs.",
+          "f1": 0.2564,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "helios-overview",
+            "meridian-project",
+            "fjord-protocol",
+            "aurora-engine",
+            "vantage-robotics"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Which protocol did the Fjord Protocol replace?",
+          "prediction": "Sable Protocol (technology): The Fjord Protocol replaced the older Sable Protocol in 2022.",
+          "reference": "The Fjord Protocol replaced the Sable Protocol.",
+          "f1": 0.625,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "meridian-project",
+            "vantage-robotics",
+            "aurora-engine",
+            "fjord-protocol",
+            "helios-overview"
+          ],
+          "stale_communities_touched": 0
+        }
+      ]
+    },
+    {
+      "system": "full-reindex",
+      "scenario": "base-on-base",
+      "n": 6,
+      "f1": 0.4334,
+      "em": 0.0,
+      "recall": 0.8333,
+      "stale_answer_rate": 0.0,
+      "abstention_rate": 0.0,
+      "update_cost": {
+        "tokens": 36838,
+        "wall_ms": 70.95,
+        "usd": 0.420987,
+        "communities_recomputed": 28,
+        "changes": 5,
+        "tokens_per_change": 7367.6
+      },
+      "index": {
+        "entities": 19,
+        "relations": 37,
+        "communities": 9,
+        "chunks": 12,
+        "active_documents": 5
+      },
+      "staleness": {
+        "dirty_count": 0,
+        "community_count": 9,
+        "dirty_fraction": 0.0,
+        "oldest_dirty_age_s": 0.0,
+        "queue_depth": 0
+      },
+      "per_question": [
+        {
+          "question": "Who founded Helios Labs?",
+          "prediction": "Trondheim Institute (organization): Helios Labs was founded by Marit Solberg in 2019 as a spin-out of the Trondheim Institute. Marit Solberg (person): Helios Labs was founded by Marit Solberg in 2019 as a spin-out of the Trondheim Institute.",
+          "reference": "Marit Solberg founded Helios Labs in 2019.",
+          "f1": 0.3415,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "helios-overview",
+            "kestrel-systems",
+            "fjord-protocol",
+            "aurora-engine",
+            "northwind"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Which protocol does Aurora Engine use for replication between clusters?",
+          "prediction": "Aurora Engine is a streaming graph database built for continuous analytical queries. Aurora Engine was released in 2021 by Helios Labs after two years of internal development. Aurora Engine uses the Fjord Protocol for replication between clusters. The Fjord Protocol gives Aurora Engine strong consistency across regions.",
+          "reference": "Aurora Engine uses the Fjord Protocol for replication between clusters.",
+          "f1": 0.3396,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "aurora-engine",
+            "northwind",
+            "helios-overview",
+            "fjord-protocol",
+            "kestrel-systems"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Which protocol did the Fjord Protocol replace?",
+          "prediction": "Sable Protocol (technology): The Fjord Protocol replaced the older Sable Protocol in 2022.",
+          "reference": "The Fjord Protocol replaced the Sable Protocol.",
+          "f1": 0.625,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "aurora-engine",
+            "helios-overview",
+            "fjord-protocol",
+            "kestrel-systems",
+            "northwind"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Where is Northwind Analytics headquartered?",
+          "prediction": "Rotterdam (concept): Northwind Analytics is headquartered in Rotterdam and runs Aurora Engine on three clusters.",
+          "reference": "Northwind Analytics is headquartered in Rotterdam.",
+          "f1": 0.5714,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "northwind",
+            "aurora-engine",
+            "kestrel-systems",
+            "helios-overview",
+            "fjord-protocol"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Which company develops Aurora Engine?",
+          "prediction": "Northwind Analytics (concept): Northwind Analytics deployed Aurora Engine for its fraud detection platform in 2022. Rotterdam (concept): Northwind Analytics is headquartered in Rotterdam and runs Aurora Engine on three clusters.",
+          "reference": "Helios Labs develops Aurora Engine.",
+          "f1": 0.1143,
+          "recall": 0.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "northwind",
+            "aurora-engine",
+            "helios-overview",
+            "fjord-protocol",
+            "kestrel-systems"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "What is the name of the query language exposed by Aurora Engine?",
+          "prediction": "Aurora Engine exposes a query language called Lumen. Lumen was designed by the systems group at Helios Labs.",
+          "reference": "Aurora Engine exposes a query language called Lumen.",
+          "f1": 0.6087,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "aurora-engine",
+            "northwind",
+            "helios-overview",
+            "fjord-protocol",
+            "kestrel-systems"
+          ],
+          "stale_communities_touched": 0
+        }
+      ]
+    },
+    {
+      "system": "full-reindex",
+      "scenario": "base-on-updated",
+      "n": 6,
+      "f1": 0.4334,
+      "em": 0.0,
+      "recall": 0.8333,
+      "stale_answer_rate": 0.0,
+      "abstention_rate": 0.0,
+      "update_cost": {
+        "tokens": 52193,
+        "wall_ms": 107.82,
+        "usd": 0.604061,
+        "communities_recomputed": 41,
+        "changes": 4,
+        "tokens_per_change": 13048.2
+      },
+      "index": {
+        "entities": 27,
+        "relations": 53,
+        "communities": 11,
+        "chunks": 16,
+        "active_documents": 7
+      },
+      "staleness": {
+        "dirty_count": 0,
+        "community_count": 11,
+        "dirty_fraction": 0.0,
+        "oldest_dirty_age_s": 0.0,
+        "queue_depth": 0
+      },
+      "per_question": [
+        {
+          "question": "Who founded Helios Labs?",
+          "prediction": "Trondheim Institute (organization): Helios Labs was founded by Marit Solberg in 2019 as a spin-out of the Trondheim Institute. Marit Solberg (person): Helios Labs was founded by Marit Solberg in 2019 as a spin-out of the Trondheim Institute.",
+          "reference": "Marit Solberg founded Helios Labs in 2019.",
+          "f1": 0.3415,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "helios-overview",
+            "meridian-project",
+            "fjord-protocol",
+            "aurora-engine",
+            "northwind",
+            "kestrel-systems",
+            "vantage-robotics"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Which protocol does Aurora Engine use for replication between clusters?",
+          "prediction": "Aurora Engine is a streaming graph database built for continuous analytical queries. Aurora Engine was released in 2021 by Helios Labs after two years of internal development. Aurora Engine uses the Fjord Protocol for replication between clusters. The Fjord Protocol gives Aurora Engine strong consistency across regions.",
+          "reference": "Aurora Engine uses the Fjord Protocol for replication between clusters.",
+          "f1": 0.3396,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "aurora-engine",
+            "northwind",
+            "helios-overview",
+            "kestrel-systems",
+            "meridian-project",
+            "fjord-protocol",
+            "vantage-robotics"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Which protocol did the Fjord Protocol replace?",
+          "prediction": "Sable Protocol (technology): The Fjord Protocol replaced the older Sable Protocol in 2022.",
+          "reference": "The Fjord Protocol replaced the Sable Protocol.",
+          "f1": 0.625,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "kestrel-systems",
+            "meridian-project",
+            "vantage-robotics",
+            "aurora-engine",
+            "fjord-protocol",
+            "helios-overview"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Where is Northwind Analytics headquartered?",
+          "prediction": "Rotterdam (concept): Northwind Analytics is headquartered in Rotterdam and runs Aurora Engine on three clusters.",
+          "reference": "Northwind Analytics is headquartered in Rotterdam.",
+          "f1": 0.5714,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "northwind",
+            "aurora-engine",
+            "vantage-robotics",
+            "helios-overview",
+            "kestrel-systems"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Which company develops Aurora Engine?",
+          "prediction": "Northwind Analytics (concept): Northwind Analytics deployed Aurora Engine for its fraud detection platform in 2022. Rotterdam (concept): Northwind Analytics is headquartered in Rotterdam and runs Aurora Engine on three clusters.",
+          "reference": "Helios Labs develops Aurora Engine.",
+          "f1": 0.1143,
+          "recall": 0.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "northwind",
+            "aurora-engine",
+            "helios-overview",
+            "kestrel-systems",
+            "vantage-robotics"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "What is the name of the query language exposed by Aurora Engine?",
+          "prediction": "Aurora Engine exposes a query language called Lumen. Lumen was designed by the systems group at Helios Labs.",
+          "reference": "Aurora Engine exposes a query language called Lumen.",
+          "f1": 0.6087,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "helios-overview",
+            "aurora-engine",
+            "northwind",
+            "kestrel-systems",
+            "fjord-protocol",
+            "meridian-project"
+          ],
+          "stale_communities_touched": 0
+        }
+      ]
+    },
+    {
+      "system": "full-reindex",
+      "scenario": "new-on-updated",
+      "n": 5,
+      "f1": 0.6282,
+      "em": 0.0,
+      "recall": 1.0,
+      "stale_answer_rate": 0.0,
+      "abstention_rate": 0.0,
+      "update_cost": {
+        "tokens": 52193,
+        "wall_ms": 107.82,
+        "usd": 0.604061,
+        "communities_recomputed": 41,
+        "changes": 4,
+        "tokens_per_change": 13048.2
+      },
+      "index": {
+        "entities": 27,
+        "relations": 53,
+        "communities": 11,
+        "chunks": 16,
+        "active_documents": 7
+      },
+      "staleness": {
+        "dirty_count": 0,
+        "community_count": 11,
+        "dirty_fraction": 0.0,
+        "oldest_dirty_age_s": 0.0,
+        "queue_depth": 0
+      },
+      "per_question": [
+        {
+          "question": "Who leads the platform team at Northwind Analytics?",
+          "prediction": "Sofia Almeida (person): Sofia Almeida leads the platform team at Northwind Analytics.",
+          "reference": "Sofia Almeida leads the platform team at Northwind Analytics.",
+          "f1": 0.8421,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "northwind",
+            "aurora-engine",
+            "kestrel-systems",
+            "vantage-robotics",
+            "helios-overview"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Which protocol did Kestrel Systems adopt across its edge fleet in 2024?",
+          "prediction": "Tundra Protocol (technology): In 2024 Kestrel Systems replaced the Fjord Protocol with the Tundra Protocol across its edge fleet.",
+          "reference": "Kestrel Systems replaced the Fjord Protocol with the Tundra Protocol.",
+          "f1": 0.64,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "kestrel-systems",
+            "vantage-robotics",
+            "meridian-project",
+            "fjord-protocol",
+            "helios-overview",
+            "aurora-engine"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Who co-leads the Meridian project?",
+          "prediction": "Ines Duarte (concept): Ines Duarte co-leads the Meridian project on behalf of Kestrel Systems.",
+          "reference": "Ines Duarte co-leads the Meridian project.",
+          "f1": 0.5556,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "kestrel-systems",
+            "meridian-project",
+            "helios-overview",
+            "fjord-protocol",
+            "vantage-robotics",
+            "aurora-engine"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Which company builds autonomous inspection drones in Bilbao?",
+          "prediction": "Bilbao (concept): Vantage Robotics builds autonomous inspection drones in Bilbao.",
+          "reference": "Vantage Robotics builds autonomous inspection drones in Bilbao.",
+          "f1": 0.8889,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "helios-overview",
+            "kestrel-systems",
+            "vantage-robotics",
+            "meridian-project",
+            "aurora-engine",
+            "fjord-protocol",
+            "northwind"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Who founded Vantage Robotics?",
+          "prediction": "Bilbao (concept): Vantage Robotics builds autonomous inspection drones in Bilbao. Vantage Robotics and related entities: This community covers 4 entities, centred on Vantage Robotics, Tundra Protocol, Nuria Castell. Recorded relations: Vantage Robotics --founded--> Nuria Castell; Nuria Castell --leads--> Vantage Robotics; Vantage Robotics --develops--> Bilbao; Vantage Robotics --uses--> Tundra Pro",
+          "reference": "Nuria Castell founded Vantage Robotics in 2020.",
+          "f1": 0.2143,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "vantage-robotics",
+            "kestrel-systems",
+            "northwind",
+            "aurora-engine",
+            "meridian-project",
+            "helios-overview",
+            "fjord-protocol"
+          ],
+          "stale_communities_touched": 0
+        }
+      ]
+    },
+    {
+      "system": "full-reindex",
+      "scenario": "deletion",
+      "n": 6,
+      "f1": 0.1667,
+      "em": 0.1667,
+      "recall": 1.0,
+      "stale_answer_rate": 0.0,
+      "abstention_rate": 0.1667,
+      "update_cost": {
+        "tokens": 22866,
+        "wall_ms": 46.03,
+        "usd": 0.261847,
+        "communities_recomputed": 15,
+        "changes": 2,
+        "tokens_per_change": 11433.0
+      },
+      "index": {
+        "entities": 18,
+        "relations": 37,
+        "communities": 7,
+        "chunks": 12,
+        "active_documents": 5
+      },
+      "staleness": {
+        "dirty_count": 0,
+        "community_count": 7,
+        "dirty_fraction": 0.0,
+        "oldest_dirty_age_s": 0.0,
+        "queue_depth": 0
+      },
+      "per_question": [
+        {
+          "question": "Which city did Kestrel Systems relocate to?",
+          "prediction": "Kestrel Systems (concept): The Meridian project is a joint effort between Helios Labs and Kestrel Systems. Ines Duarte (concept): Ines Duarte co-leads the Meridian project on behalf of Kestrel Systems.",
+          "reference": "The indexed sources do not contain this information.",
+          "f1": 0.0,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "meridian-project",
+            "helios-overview",
+            "fjord-protocol",
+            "vantage-robotics",
+            "aurora-engine"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Who founded Northwind Analytics?",
+          "prediction": "Nuria Castell (person): Nuria Castell previously worked at Northwind Analytics.",
+          "reference": "The indexed sources do not contain this information.",
+          "f1": 0.0,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "helios-overview",
+            "aurora-engine",
+            "vantage-robotics",
+            "meridian-project",
+            "fjord-protocol"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Which internal risk model does Northwind Analytics maintain?",
+          "prediction": "Nuria Castell (person): Nuria Castell previously worked at Northwind Analytics.",
+          "reference": "The indexed sources do not contain this information.",
+          "f1": 0.0,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "aurora-engine",
+            "vantage-robotics",
+            "helios-overview",
+            "meridian-project",
+            "fjord-protocol"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Which edge appliance did Kestrel Systems discontinue in 2024?",
+          "prediction": "The indexed sources do not contain this information.",
+          "reference": "The indexed sources do not contain this information.",
+          "f1": 1.0,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": true,
+          "citations": [
+            "meridian-project",
+            "helios-overview",
+            "fjord-protocol",
+            "vantage-robotics",
+            "aurora-engine"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Who leads the platform team at Northwind Analytics?",
+          "prediction": "Northwind Analytics (concept): Northwind Analytics deployed Aurora Engine for its fraud detection platform in 2022.",
+          "reference": "The indexed sources do not contain this information.",
+          "f1": 0.0,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "aurora-engine",
+            "helios-overview",
+            "fjord-protocol",
+            "meridian-project",
+            "vantage-robotics"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Which appliance replaced the Harrier gateway at Kestrel Systems?",
+          "prediction": "Kestrel Systems (concept): The Meridian project is a joint effort between Helios Labs and Kestrel Systems. Meridian (concept): The Meridian project is a joint effort between Helios Labs and Kestrel Systems.",
+          "reference": "The indexed sources do not contain this information.",
+          "f1": 0.0,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "meridian-project",
+            "helios-overview",
+            "fjord-protocol",
+            "aurora-engine",
+            "vantage-robotics"
+          ],
+          "stale_communities_touched": 0
+        }
+      ]
+    },
+    {
+      "system": "full-reindex",
+      "scenario": "deletion-survivors",
+      "n": 3,
+      "f1": 0.3618,
+      "em": 0.0,
+      "recall": 1.0,
+      "stale_answer_rate": 0.0,
+      "abstention_rate": 0.0,
+      "update_cost": {
+        "tokens": 22866,
+        "wall_ms": 46.03,
+        "usd": 0.261847,
+        "communities_recomputed": 15,
+        "changes": 2,
+        "tokens_per_change": 11433.0
+      },
+      "index": {
+        "entities": 18,
+        "relations": 37,
+        "communities": 7,
+        "chunks": 12,
+        "active_documents": 5
+      },
+      "staleness": {
+        "dirty_count": 0,
+        "community_count": 7,
+        "dirty_fraction": 0.0,
+        "oldest_dirty_age_s": 0.0,
+        "queue_depth": 0
+      },
+      "per_question": [
+        {
+          "question": "Which protocol does Aurora Engine use for replication between clusters?",
+          "prediction": "Aurora Engine is a streaming graph database built for continuous analytical queries. Aurora Engine was released in 2021 by Helios Labs after two years of internal development. Aurora Engine uses the Fjord Protocol for replication between clusters. The Fjord Protocol gives Aurora Engine strong consistency across regions.",
+          "reference": "Aurora Engine uses the Fjord Protocol.",
+          "f1": 0.2041,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "aurora-engine",
+            "helios-overview",
+            "meridian-project",
+            "fjord-protocol",
+            "vantage-robotics"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Who founded Helios Labs?",
+          "prediction": "Trondheim Institute (organization): Helios Labs was founded by Marit Solberg in 2019 as a spin-out of the Trondheim Institute. Marit Solberg (person): Helios Labs was founded by Marit Solberg in 2019 as a spin-out of the Trondheim Institute.",
+          "reference": "Marit Solberg founded Helios Labs.",
+          "f1": 0.2564,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "helios-overview",
+            "meridian-project",
+            "fjord-protocol",
+            "aurora-engine",
+            "vantage-robotics"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Which protocol did the Fjord Protocol replace?",
+          "prediction": "Sable Protocol (technology): The Fjord Protocol replaced the older Sable Protocol in 2022.",
+          "reference": "The Fjord Protocol replaced the Sable Protocol.",
+          "f1": 0.625,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "aurora-engine",
+            "meridian-project",
+            "helios-overview",
+            "fjord-protocol",
+            "vantage-robotics"
+          ],
+          "stale_communities_touched": 0
+        }
+      ]
+    },
+    {
+      "system": "append-only",
+      "scenario": "base-on-base",
+      "n": 6,
+      "f1": 0.4334,
+      "em": 0.0,
+      "recall": 0.8333,
+      "stale_answer_rate": 0.0,
+      "abstention_rate": 0.0,
+      "update_cost": {
+        "tokens": 14995,
+        "wall_ms": 24.27,
+        "usd": 0.157221,
+        "communities_recomputed": 16,
+        "changes": 5,
+        "tokens_per_change": 2999.0
+      },
+      "index": {
+        "entities": 19,
+        "relations": 37,
+        "communities": 9,
+        "chunks": 12,
+        "active_documents": 5
+      },
+      "staleness": {
+        "dirty_count": 0,
+        "community_count": 9,
+        "dirty_fraction": 0.0,
+        "oldest_dirty_age_s": 0.0,
+        "queue_depth": 0
+      },
+      "per_question": [
+        {
+          "question": "Who founded Helios Labs?",
+          "prediction": "Trondheim Institute (organization): Helios Labs was founded by Marit Solberg in 2019 as a spin-out of the Trondheim Institute. Marit Solberg (person): Helios Labs was founded by Marit Solberg in 2019 as a spin-out of the Trondheim Institute.",
+          "reference": "Marit Solberg founded Helios Labs in 2019.",
+          "f1": 0.3415,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "helios-overview#v0",
+            "kestrel-systems#v0",
+            "fjord-protocol#v0",
+            "aurora-engine#v0",
+            "northwind#v0"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Which protocol does Aurora Engine use for replication between clusters?",
+          "prediction": "Aurora Engine is a streaming graph database built for continuous analytical queries. Aurora Engine was released in 2021 by Helios Labs after two years of internal development. Aurora Engine uses the Fjord Protocol for replication between clusters. The Fjord Protocol gives Aurora Engine strong consistency across regions.",
+          "reference": "Aurora Engine uses the Fjord Protocol for replication between clusters.",
+          "f1": 0.3396,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "aurora-engine#v0",
+            "northwind#v0",
+            "helios-overview#v0",
+            "fjord-protocol#v0",
+            "kestrel-systems#v0"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Which protocol did the Fjord Protocol replace?",
+          "prediction": "Sable Protocol (technology): The Fjord Protocol replaced the older Sable Protocol in 2022.",
+          "reference": "The Fjord Protocol replaced the Sable Protocol.",
+          "f1": 0.625,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "aurora-engine#v0",
+            "helios-overview#v0",
+            "fjord-protocol#v0",
+            "kestrel-systems#v0",
+            "northwind#v0"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Where is Northwind Analytics headquartered?",
+          "prediction": "Rotterdam (concept): Northwind Analytics is headquartered in Rotterdam and runs Aurora Engine on three clusters.",
+          "reference": "Northwind Analytics is headquartered in Rotterdam.",
+          "f1": 0.5714,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "northwind#v0",
+            "aurora-engine#v0",
+            "kestrel-systems#v0",
+            "helios-overview#v0",
+            "fjord-protocol#v0"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Which company develops Aurora Engine?",
+          "prediction": "Northwind Analytics (concept): Northwind Analytics deployed Aurora Engine for its fraud detection platform in 2022. Rotterdam (concept): Northwind Analytics is headquartered in Rotterdam and runs Aurora Engine on three clusters.",
+          "reference": "Helios Labs develops Aurora Engine.",
+          "f1": 0.1143,
+          "recall": 0.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "northwind#v0",
+            "aurora-engine#v0",
+            "helios-overview#v0",
+            "fjord-protocol#v0",
+            "kestrel-systems#v0"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "What is the name of the query language exposed by Aurora Engine?",
+          "prediction": "Aurora Engine exposes a query language called Lumen. Lumen was designed by the systems group at Helios Labs.",
+          "reference": "Aurora Engine exposes a query language called Lumen.",
+          "f1": 0.6087,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "aurora-engine#v0",
+            "northwind#v0",
+            "helios-overview#v0",
+            "fjord-protocol#v0",
+            "kestrel-systems#v0"
+          ],
+          "stale_communities_touched": 0
+        }
+      ]
+    },
+    {
+      "system": "append-only",
+      "scenario": "base-on-updated",
+      "n": 6,
+      "f1": 0.4334,
+      "em": 0.0,
+      "recall": 0.8333,
+      "stale_answer_rate": 0.0,
+      "abstention_rate": 0.0,
+      "update_cost": {
+        "tokens": 12787,
+        "wall_ms": 19.88,
+        "usd": 0.127847,
+        "communities_recomputed": 15,
+        "changes": 4,
+        "tokens_per_change": 3196.8
+      },
+      "index": {
+        "entities": 27,
+        "relations": 60,
+        "communities": 11,
+        "chunks": 20,
+        "active_documents": 9
+      },
+      "staleness": {
+        "dirty_count": 0,
+        "community_count": 11,
+        "dirty_fraction": 0.0,
+        "oldest_dirty_age_s": 0.0,
+        "queue_depth": 0
+      },
+      "per_question": [
+        {
+          "question": "Who founded Helios Labs?",
+          "prediction": "Trondheim Institute (organization): Helios Labs was founded by Marit Solberg in 2019 as a spin-out of the Trondheim Institute. Marit Solberg (person): Helios Labs was founded by Marit Solberg in 2019 as a spin-out of the Trondheim Institute.",
+          "reference": "Marit Solberg founded Helios Labs in 2019.",
+          "f1": 0.3415,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "helios-overview#v0",
+            "kestrel-systems#v0",
+            "meridian-project#v0",
+            "fjord-protocol#v0",
+            "aurora-engine#v0",
+            "northwind#v0",
+            "northwind#v1",
+            "kestrel-systems#v1",
+            "vantage-robotics#v0"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Which protocol does Aurora Engine use for replication between clusters?",
+          "prediction": "Aurora Engine is a streaming graph database built for continuous analytical queries. Aurora Engine was released in 2021 by Helios Labs after two years of internal development. Aurora Engine uses the Fjord Protocol for replication between clusters. The Fjord Protocol gives Aurora Engine strong consistency across regions.",
+          "reference": "Aurora Engine uses the Fjord Protocol for replication between clusters.",
+          "f1": 0.3396,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "aurora-engine#v0",
+            "northwind#v0",
+            "northwind#v1",
+            "helios-overview#v0",
+            "kestrel-systems#v1",
+            "meridian-project#v0",
+            "fjord-protocol#v0",
+            "kestrel-systems#v0",
+            "vantage-robotics#v0"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Which protocol did the Fjord Protocol replace?",
+          "prediction": "Sable Protocol (technology): The Fjord Protocol replaced the older Sable Protocol in 2022.",
+          "reference": "The Fjord Protocol replaced the Sable Protocol.",
+          "f1": 0.625,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "kestrel-systems#v1",
+            "vantage-robotics#v0",
+            "meridian-project#v0",
+            "aurora-engine#v0",
+            "fjord-protocol#v0",
+            "kestrel-systems#v0",
+            "helios-overview#v0"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Where is Northwind Analytics headquartered?",
+          "prediction": "Rotterdam (concept): Northwind Analytics is headquartered in Rotterdam and runs Aurora Engine on three clusters.",
+          "reference": "Northwind Analytics is headquartered in Rotterdam.",
+          "f1": 0.5714,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "northwind#v1",
+            "northwind#v0",
+            "aurora-engine#v0",
+            "helios-overview#v0",
+            "vantage-robotics#v0",
+            "fjord-protocol#v0",
+            "kestrel-systems#v0",
+            "meridian-project#v0",
+            "kestrel-systems#v1"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Which company develops Aurora Engine?",
+          "prediction": "Northwind Analytics (concept): Northwind Analytics deployed Aurora Engine for its fraud detection platform in 2022. Rotterdam (concept): Northwind Analytics is headquartered in Rotterdam and runs Aurora Engine on three clusters.",
+          "reference": "Helios Labs develops Aurora Engine.",
+          "f1": 0.1143,
+          "recall": 0.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "northwind#v0",
+            "northwind#v1",
+            "aurora-engine#v0",
+            "helios-overview#v0",
+            "vantage-robotics#v0",
+            "kestrel-systems#v1"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "What is the name of the query language exposed by Aurora Engine?",
+          "prediction": "Aurora Engine exposes a query language called Lumen. Lumen was designed by the systems group at Helios Labs.",
+          "reference": "Aurora Engine exposes a query language called Lumen.",
+          "f1": 0.6087,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "helios-overview#v0",
+            "aurora-engine#v0",
+            "northwind#v0",
+            "northwind#v1",
+            "kestrel-systems#v1",
+            "fjord-protocol#v0",
+            "kestrel-systems#v0",
+            "meridian-project#v0",
+            "vantage-robotics#v0"
+          ],
+          "stale_communities_touched": 0
+        }
+      ]
+    },
+    {
+      "system": "append-only",
+      "scenario": "new-on-updated",
+      "n": 5,
+      "f1": 0.6282,
+      "em": 0.0,
+      "recall": 1.0,
+      "stale_answer_rate": 0.0,
+      "abstention_rate": 0.0,
+      "update_cost": {
+        "tokens": 12787,
+        "wall_ms": 19.88,
+        "usd": 0.127847,
+        "communities_recomputed": 15,
+        "changes": 4,
+        "tokens_per_change": 3196.8
+      },
+      "index": {
+        "entities": 27,
+        "relations": 60,
+        "communities": 11,
+        "chunks": 20,
+        "active_documents": 9
+      },
+      "staleness": {
+        "dirty_count": 0,
+        "community_count": 11,
+        "dirty_fraction": 0.0,
+        "oldest_dirty_age_s": 0.0,
+        "queue_depth": 0
+      },
+      "per_question": [
+        {
+          "question": "Who leads the platform team at Northwind Analytics?",
+          "prediction": "Sofia Almeida (person): Sofia Almeida leads the platform team at Northwind Analytics.",
+          "reference": "Sofia Almeida leads the platform team at Northwind Analytics.",
+          "f1": 0.8421,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "northwind#v1",
+            "northwind#v0",
+            "aurora-engine#v0",
+            "helios-overview#v0",
+            "vantage-robotics#v0",
+            "fjord-protocol#v0",
+            "kestrel-systems#v0",
+            "meridian-project#v0",
+            "kestrel-systems#v1"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Which protocol did Kestrel Systems adopt across its edge fleet in 2024?",
+          "prediction": "Tundra Protocol (technology): In 2024 Kestrel Systems replaced the Fjord Protocol with the Tundra Protocol across its edge fleet.",
+          "reference": "Kestrel Systems replaced the Fjord Protocol with the Tundra Protocol.",
+          "f1": 0.64,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "kestrel-systems#v1",
+            "vantage-robotics#v0",
+            "kestrel-systems#v0",
+            "meridian-project#v0",
+            "fjord-protocol#v0",
+            "aurora-engine#v0",
+            "helios-overview#v0"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Who co-leads the Meridian project?",
+          "prediction": "Ines Duarte (concept): Ines Duarte co-leads the Meridian project on behalf of Kestrel Systems.",
+          "reference": "Ines Duarte co-leads the Meridian project.",
+          "f1": 0.5556,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "kestrel-systems#v1",
+            "meridian-project#v0",
+            "kestrel-systems#v0",
+            "helios-overview#v0",
+            "fjord-protocol#v0",
+            "vantage-robotics#v0",
+            "aurora-engine#v0"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Which company builds autonomous inspection drones in Bilbao?",
+          "prediction": "Bilbao (concept): Vantage Robotics builds autonomous inspection drones in Bilbao.",
+          "reference": "Vantage Robotics builds autonomous inspection drones in Bilbao.",
+          "f1": 0.8889,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "kestrel-systems#v1",
+            "helios-overview#v0",
+            "kestrel-systems#v0",
+            "vantage-robotics#v0",
+            "aurora-engine#v0",
+            "fjord-protocol#v0",
+            "meridian-project#v0",
+            "northwind#v0",
+            "northwind#v1"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Who founded Vantage Robotics?",
+          "prediction": "Bilbao (concept): Vantage Robotics builds autonomous inspection drones in Bilbao. Vantage Robotics and related entities: This community covers 4 entities, centred on Vantage Robotics, Tundra Protocol, Nuria Castell. Recorded relations: Vantage Robotics --founded--> Nuria Castell; Nuria Castell --leads--> Vantage Robotics; Vantage Robotics --develops--> Bilbao; Vantage Robotics --uses--> Tundra Pro",
+          "reference": "Nuria Castell founded Vantage Robotics in 2020.",
+          "f1": 0.2143,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "vantage-robotics#v0",
+            "kestrel-systems#v1",
+            "northwind#v0",
+            "northwind#v1",
+            "aurora-engine#v0",
+            "meridian-project#v0",
+            "helios-overview#v0",
+            "fjord-protocol#v0",
+            "kestrel-systems#v0"
+          ],
+          "stale_communities_touched": 0
+        }
+      ]
+    },
+    {
+      "system": "append-only",
+      "scenario": "deletion",
+      "n": 6,
+      "f1": 0.0,
+      "em": 0.0,
+      "recall": 1.0,
+      "stale_answer_rate": 1.0,
+      "abstention_rate": 0.0,
+      "update_cost": {
+        "tokens": 0,
+        "wall_ms": 0.01,
+        "usd": 0.0,
+        "communities_recomputed": 0,
+        "changes": 2,
+        "tokens_per_change": 0.0
+      },
+      "index": {
+        "entities": 27,
+        "relations": 60,
+        "communities": 11,
+        "chunks": 20,
+        "active_documents": 9
+      },
+      "staleness": {
+        "dirty_count": 0,
+        "community_count": 11,
+        "dirty_fraction": 0.0,
+        "oldest_dirty_age_s": 0.0,
+        "queue_depth": 0
+      },
+      "per_question": [
+        {
+          "question": "Which city did Kestrel Systems relocate to?",
+          "prediction": "Ines Duarte (person): Ines Duarte remains the chief executive of Kestrel Systems. Kestrel Systems (concept): Kestrel Systems is an edge computing company that relocated from Porto to Lisbon in 2024.",
+          "reference": "The indexed sources do not contain this information.",
+          "f1": 0.0,
+          "recall": 1.0,
+          "stale": true,
+          "abstained": false,
+          "citations": [
+            "kestrel-systems#v1",
+            "kestrel-systems#v0",
+            "meridian-project#v0",
+            "helios-overview#v0",
+            "fjord-protocol#v0",
+            "vantage-robotics#v0"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Who founded Northwind Analytics?",
+          "prediction": "Pieter Vos (person): Pieter Vos moved to the board of Northwind Analytics in 2024. Sofia Almeida (person): Sofia Almeida leads the platform team at Northwind Analytics.",
+          "reference": "The indexed sources do not contain this information.",
+          "f1": 0.0,
+          "recall": 1.0,
+          "stale": true,
+          "abstained": false,
+          "citations": [
+            "northwind#v1",
+            "northwind#v0",
+            "aurora-engine#v0",
+            "helios-overview#v0",
+            "vantage-robotics#v0",
+            "fjord-protocol#v0",
+            "kestrel-systems#v0",
+            "meridian-project#v0"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Which internal risk model does Northwind Analytics maintain?",
+          "prediction": "Tideline (concept): Northwind Analytics also maintains an internal risk model called Tideline.",
+          "reference": "The indexed sources do not contain this information.",
+          "f1": 0.0,
+          "recall": 1.0,
+          "stale": true,
+          "abstained": false,
+          "citations": [
+            "northwind#v1",
+            "northwind#v0",
+            "aurora-engine#v0",
+            "helios-overview#v0",
+            "vantage-robotics#v0",
+            "fjord-protocol#v0",
+            "kestrel-systems#v0",
+            "meridian-project#v0"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Which edge appliance did Kestrel Systems discontinue in 2024?",
+          "prediction": "Kestrel Systems (concept): Kestrel Systems is an edge computing company that relocated from Porto to Lisbon in 2024. Kite (concept): Kestrel Systems discontinued the Harrier gateway in 2024 and replaced it with the Kite appliance.",
+          "reference": "The indexed sources do not contain this information.",
+          "f1": 0.0,
+          "recall": 1.0,
+          "stale": true,
+          "abstained": false,
+          "citations": [
+            "kestrel-systems#v1",
+            "kestrel-systems#v0",
+            "vantage-robotics#v0",
+            "helios-overview#v0",
+            "meridian-project#v0",
+            "fjord-protocol#v0"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Who leads the platform team at Northwind Analytics?",
+          "prediction": "Sofia Almeida (person): Sofia Almeida leads the platform team at Northwind Analytics.",
+          "reference": "The indexed sources do not contain this information.",
+          "f1": 0.0,
+          "recall": 1.0,
+          "stale": true,
+          "abstained": false,
+          "citations": [
+            "northwind#v1",
+            "northwind#v0",
+            "aurora-engine#v0",
+            "helios-overview#v0",
+            "vantage-robotics#v0",
+            "fjord-protocol#v0",
+            "kestrel-systems#v0",
+            "meridian-project#v0",
+            "kestrel-systems#v1"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Which appliance replaced the Harrier gateway at Kestrel Systems?",
+          "prediction": "Kite (concept): Kestrel Systems discontinued the Harrier gateway in 2024 and replaced it with the Kite appliance. Harrier (concept): Kestrel Systems discontinued the Harrier gateway in 2024 and replaced it with the Kite appliance.",
+          "reference": "The indexed sources do not contain this information.",
+          "f1": 0.0,
+          "recall": 1.0,
+          "stale": true,
+          "abstained": false,
+          "citations": [
+            "kestrel-systems#v1",
+            "kestrel-systems#v0",
+            "vantage-robotics#v0",
+            "meridian-project#v0",
+            "helios-overview#v0",
+            "fjord-protocol#v0"
+          ],
+          "stale_communities_touched": 0
+        }
+      ]
+    },
+    {
+      "system": "append-only",
+      "scenario": "deletion-survivors",
+      "n": 3,
+      "f1": 0.3618,
+      "em": 0.0,
+      "recall": 1.0,
+      "stale_answer_rate": 0.0,
+      "abstention_rate": 0.0,
+      "update_cost": {
+        "tokens": 0,
+        "wall_ms": 0.01,
+        "usd": 0.0,
+        "communities_recomputed": 0,
+        "changes": 2,
+        "tokens_per_change": 0.0
+      },
+      "index": {
+        "entities": 27,
+        "relations": 60,
+        "communities": 11,
+        "chunks": 20,
+        "active_documents": 9
+      },
+      "staleness": {
+        "dirty_count": 0,
+        "community_count": 11,
+        "dirty_fraction": 0.0,
+        "oldest_dirty_age_s": 0.0,
+        "queue_depth": 0
+      },
+      "per_question": [
+        {
+          "question": "Which protocol does Aurora Engine use for replication between clusters?",
+          "prediction": "Aurora Engine is a streaming graph database built for continuous analytical queries. Aurora Engine was released in 2021 by Helios Labs after two years of internal development. Aurora Engine uses the Fjord Protocol for replication between clusters. The Fjord Protocol gives Aurora Engine strong consistency across regions.",
+          "reference": "Aurora Engine uses the Fjord Protocol.",
+          "f1": 0.2041,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "aurora-engine#v0",
+            "northwind#v0",
+            "northwind#v1",
+            "helios-overview#v0",
+            "kestrel-systems#v1",
+            "meridian-project#v0",
+            "fjord-protocol#v0",
+            "kestrel-systems#v0",
+            "vantage-robotics#v0"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Who founded Helios Labs?",
+          "prediction": "Trondheim Institute (organization): Helios Labs was founded by Marit Solberg in 2019 as a spin-out of the Trondheim Institute. Marit Solberg (person): Helios Labs was founded by Marit Solberg in 2019 as a spin-out of the Trondheim Institute.",
+          "reference": "Marit Solberg founded Helios Labs.",
+          "f1": 0.2564,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "helios-overview#v0",
+            "kestrel-systems#v0",
+            "meridian-project#v0",
+            "fjord-protocol#v0",
+            "aurora-engine#v0",
+            "northwind#v0",
+            "northwind#v1",
+            "kestrel-systems#v1",
+            "vantage-robotics#v0"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Which protocol did the Fjord Protocol replace?",
+          "prediction": "Sable Protocol (technology): The Fjord Protocol replaced the older Sable Protocol in 2022.",
+          "reference": "The Fjord Protocol replaced the Sable Protocol.",
+          "f1": 0.625,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "kestrel-systems#v1",
+            "vantage-robotics#v0",
+            "meridian-project#v0",
+            "aurora-engine#v0",
+            "fjord-protocol#v0",
+            "kestrel-systems#v0",
+            "helios-overview#v0"
+          ],
+          "stale_communities_touched": 0
+        }
+      ]
+    },
+    {
+      "system": "flat-vector",
+      "scenario": "base-on-base",
+      "n": 6,
+      "f1": 0.2382,
+      "em": 0.0,
+      "recall": 0.6667,
+      "stale_answer_rate": 0.0,
+      "abstention_rate": 0.1667,
+      "update_cost": {
+        "tokens": 879,
+        "wall_ms": 2.7,
+        "usd": 1.8e-05,
+        "communities_recomputed": 0,
+        "changes": 5,
+        "tokens_per_change": 175.8
+      },
+      "index": {
+        "entities": 0,
+        "relations": 0,
+        "communities": 0,
+        "chunks": 12,
+        "active_documents": 5
+      },
+      "staleness": {},
+      "per_question": [
+        {
+          "question": "Who founded Helios Labs?",
+          "prediction": "Helios Labs partnered with Kestrel Systems on the Meridian project in 2023. The Meridian project is sponsored jointly by both organizations. Aurora Engine exposes a query language called Lumen. Lumen was designed by the systems group at Helios Labs.",
+          "reference": "Marit Solberg founded Helios Labs in 2019.",
+          "f1": 0.1429,
+          "recall": 0.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "helios-overview",
+            "kestrel-systems",
+            "aurora-engine",
+            "fjord-protocol"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Which protocol does Aurora Engine use for replication between clusters?",
+          "prediction": "Aurora Engine is a streaming graph database built for continuous analytical queries. Aurora Engine was released in 2021 by Helios Labs after two years of internal development. Aurora Engine uses the Fjord Protocol for replication between clusters. The Fjord Protocol gives Aurora Engine strong consistency across regions.",
+          "reference": "Aurora Engine uses the Fjord Protocol for replication between clusters.",
+          "f1": 0.3396,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "aurora-engine",
+            "fjord-protocol",
+            "helios-overview",
+            "northwind"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Which protocol did the Fjord Protocol replace?",
+          "prediction": "The indexed sources do not contain this information.",
+          "reference": "The Fjord Protocol replaced the Sable Protocol.",
+          "f1": 0.0,
+          "recall": 0.0,
+          "stale": false,
+          "abstained": true,
+          "citations": [
+            "fjord-protocol",
+            "helios-overview",
+            "aurora-engine",
+            "kestrel-systems"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Where is Northwind Analytics headquartered?",
+          "prediction": "Northwind Analytics is a data company headquartered in Rotterdam. Northwind Analytics was founded by Pieter Vos in 2015. Northwind Analytics uses Aurora Engine for fraud detection across European payment networks. Northwind Analytics processes several million transactions per day. The Fjord Protocol replaced the older Sable Protocol in 2022. The Sable Protocol was deprecated because of its weak co",
+          "reference": "Northwind Analytics is headquartered in Rotterdam.",
+          "f1": 0.2,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "northwind",
+            "aurora-engine",
+            "helios-overview",
+            "kestrel-systems"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Which company develops Aurora Engine?",
+          "prediction": "Northwind Analytics is a data company headquartered in Rotterdam. Northwind Analytics was founded by Pieter Vos in 2015. Northwind Analytics uses Aurora Engine for fraud detection across European payment networks. Northwind Analytics processes several million transactions per day. Aurora Engine exposes a query language called Lumen. Lumen was designed by the systems group at Helios Labs.",
+          "reference": "Helios Labs develops Aurora Engine.",
+          "f1": 0.1379,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "aurora-engine",
+            "helios-overview",
+            "northwind",
+            "kestrel-systems"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "What is the name of the query language exposed by Aurora Engine?",
+          "prediction": "Aurora Engine exposes a query language called Lumen. Lumen was designed by the systems group at Helios Labs.",
+          "reference": "Aurora Engine exposes a query language called Lumen.",
+          "f1": 0.6087,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "aurora-engine",
+            "northwind",
+            "helios-overview",
+            "fjord-protocol",
+            "kestrel-systems"
+          ],
+          "stale_communities_touched": 0
+        }
+      ]
+    },
+    {
+      "system": "flat-vector",
+      "scenario": "base-on-updated",
+      "n": 6,
+      "f1": 0.2382,
+      "em": 0.0,
+      "recall": 0.6667,
+      "stale_answer_rate": 0.0,
+      "abstention_rate": 0.1667,
+      "update_cost": {
+        "tokens": 599,
+        "wall_ms": 1.96,
+        "usd": 1.2e-05,
+        "communities_recomputed": 0,
+        "changes": 4,
+        "tokens_per_change": 149.8
+      },
+      "index": {
+        "entities": 0,
+        "relations": 0,
+        "communities": 0,
+        "chunks": 16,
+        "active_documents": 7
+      },
+      "staleness": {},
+      "per_question": [
+        {
+          "question": "Who founded Helios Labs?",
+          "prediction": "Helios Labs partnered with Kestrel Systems on the Meridian project in 2023. The Meridian project is sponsored jointly by both organizations. Aurora Engine exposes a query language called Lumen. Lumen was designed by the systems group at Helios Labs.",
+          "reference": "Marit Solberg founded Helios Labs in 2019.",
+          "f1": 0.1429,
+          "recall": 0.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "helios-overview",
+            "aurora-engine",
+            "meridian-project",
+            "fjord-protocol",
+            "northwind"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Which protocol does Aurora Engine use for replication between clusters?",
+          "prediction": "Aurora Engine is a streaming graph database built for continuous analytical queries. Aurora Engine was released in 2021 by Helios Labs after two years of internal development. Aurora Engine uses the Fjord Protocol for replication between clusters. The Fjord Protocol gives Aurora Engine strong consistency across regions.",
+          "reference": "Aurora Engine uses the Fjord Protocol for replication between clusters.",
+          "f1": 0.3396,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "aurora-engine",
+            "fjord-protocol",
+            "helios-overview",
+            "kestrel-systems",
+            "meridian-project"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Which protocol did the Fjord Protocol replace?",
+          "prediction": "The indexed sources do not contain this information.",
+          "reference": "The Fjord Protocol replaced the Sable Protocol.",
+          "f1": 0.0,
+          "recall": 0.0,
+          "stale": false,
+          "abstained": true,
+          "citations": [
+            "fjord-protocol",
+            "meridian-project",
+            "kestrel-systems",
+            "helios-overview",
+            "aurora-engine",
+            "vantage-robotics"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Where is Northwind Analytics headquartered?",
+          "prediction": "Northwind Analytics is a data company headquartered in Rotterdam. Northwind Analytics was founded by Pieter Vos in 2015. Northwind Analytics uses Aurora Engine for fraud detection across European payment networks. Northwind Analytics processes several million transactions per day. The Fjord Protocol replaced the older Sable Protocol in 2022. The Sable Protocol was deprecated because of its weak co",
+          "reference": "Northwind Analytics is headquartered in Rotterdam.",
+          "f1": 0.2,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "northwind",
+            "aurora-engine",
+            "vantage-robotics",
+            "kestrel-systems",
+            "helios-overview"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Which company develops Aurora Engine?",
+          "prediction": "Northwind Analytics is a data company headquartered in Rotterdam. Northwind Analytics was founded by Pieter Vos in 2015. Northwind Analytics uses Aurora Engine for fraud detection across European payment networks. Northwind Analytics processes several million transactions per day. Aurora Engine exposes a query language called Lumen. Lumen was designed by the systems group at Helios Labs.",
+          "reference": "Helios Labs develops Aurora Engine.",
+          "f1": 0.1379,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "aurora-engine",
+            "helios-overview",
+            "northwind",
+            "kestrel-systems"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "What is the name of the query language exposed by Aurora Engine?",
+          "prediction": "Aurora Engine exposes a query language called Lumen. Lumen was designed by the systems group at Helios Labs.",
+          "reference": "Aurora Engine exposes a query language called Lumen.",
+          "f1": 0.6087,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "aurora-engine",
+            "helios-overview",
+            "fjord-protocol",
+            "northwind"
+          ],
+          "stale_communities_touched": 0
+        }
+      ]
+    },
+    {
+      "system": "flat-vector",
+      "scenario": "new-on-updated",
+      "n": 5,
+      "f1": 0.2726,
+      "em": 0.0,
+      "recall": 1.0,
+      "stale_answer_rate": 0.0,
+      "abstention_rate": 0.0,
+      "update_cost": {
+        "tokens": 599,
+        "wall_ms": 1.96,
+        "usd": 1.2e-05,
+        "communities_recomputed": 0,
+        "changes": 4,
+        "tokens_per_change": 149.8
+      },
+      "index": {
+        "entities": 0,
+        "relations": 0,
+        "communities": 0,
+        "chunks": 16,
+        "active_documents": 7
+      },
+      "staleness": {},
+      "per_question": [
+        {
+          "question": "Who leads the platform team at Northwind Analytics?",
+          "prediction": "Northwind Analytics partnered with Helios Labs in 2022. The partnership covers joint engineering on the Lumen query language. Sofia Almeida leads the platform team at Northwind Analytics. Pieter Vos moved to the board of Northwind Analytics in 2024. Northwind Analytics also maintains an internal risk model called Tideline. Tideline consumes features produced by Aurora Engine.",
+          "reference": "Sofia Almeida leads the platform team at Northwind Analytics.",
+          "f1": 0.2759,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "northwind",
+            "aurora-engine",
+            "vantage-robotics",
+            "kestrel-systems",
+            "meridian-project",
+            "helios-overview",
+            "fjord-protocol"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Which protocol did Kestrel Systems adopt across its edge fleet in 2024?",
+          "prediction": "Kestrel Systems is an edge computing company that relocated from Porto to Lisbon in 2024. Ines Duarte remains the chief executive of Kestrel Systems. In 2024 Kestrel Systems replaced the Fjord Protocol with the Tundra Protocol across its edge fleet. The migration took nine months.",
+          "reference": "Kestrel Systems replaced the Fjord Protocol with the Tundra Protocol.",
+          "f1": 0.3333,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "kestrel-systems",
+            "fjord-protocol",
+            "vantage-robotics",
+            "aurora-engine",
+            "meridian-project",
+            "helios-overview"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Who co-leads the Meridian project?",
+          "prediction": "The Meridian project is a joint effort between Helios Labs and Kestrel Systems. The Meridian project develops low-latency replication for edge devices. Marit Solberg sponsors the Meridian project on behalf of Helios Labs. Ines Duarte co-leads the Meridian project on behalf of Kestrel Systems.",
+          "reference": "Ines Duarte co-leads the Meridian project.",
+          "f1": 0.2273,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "meridian-project",
+            "helios-overview",
+            "fjord-protocol",
+            "kestrel-systems",
+            "aurora-engine"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Which company builds autonomous inspection drones in Bilbao?",
+          "prediction": "The Tundra Protocol was developed by Kestrel Systems together with Vantage Robotics. The Tundra Protocol targets intermittently connected devices. Vantage Robotics builds autonomous inspection drones in Bilbao. Vantage Robotics uses the Tundra Protocol for fleet synchronisation. Kestrel Systems discontinued the Harrier gateway in 2024 and replaced it with the Kite appliance. Vantage Robotics build",
+          "reference": "Vantage Robotics builds autonomous inspection drones in Bilbao.",
+          "f1": 0.2807,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "kestrel-systems",
+            "helios-overview",
+            "vantage-robotics",
+            "northwind",
+            "aurora-engine",
+            "meridian-project"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Who founded Vantage Robotics?",
+          "prediction": "Vantage Robotics builds autonomous inspection drones in Bilbao. Vantage Robotics was founded by Nuria Castell in 2020. Vantage Robotics uses the Tundra Protocol for fleet synchronisation. Vantage Robotics operates several hundred drones across industrial sites. Vantage Robotics partnered with Kestrel Systems in 2024. The partnership produced the Tundra Protocol specification. Nuria Castell previou",
+          "reference": "Nuria Castell founded Vantage Robotics in 2020.",
+          "f1": 0.2456,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "vantage-robotics",
+            "kestrel-systems",
+            "northwind",
+            "helios-overview",
+            "aurora-engine"
+          ],
+          "stale_communities_touched": 0
+        }
+      ]
+    },
+    {
+      "system": "flat-vector",
+      "scenario": "deletion",
+      "n": 6,
+      "f1": 0.5,
+      "em": 0.5,
+      "recall": 1.0,
+      "stale_answer_rate": 0.0,
+      "abstention_rate": 0.5,
+      "update_cost": {
+        "tokens": 0,
+        "wall_ms": 0.01,
+        "usd": 0.0,
+        "communities_recomputed": 0,
+        "changes": 2,
+        "tokens_per_change": 0.0
+      },
+      "index": {
+        "entities": 0,
+        "relations": 0,
+        "communities": 0,
+        "chunks": 12,
+        "active_documents": 5
+      },
+      "staleness": {},
+      "per_question": [
+        {
+          "question": "Which city did Kestrel Systems relocate to?",
+          "prediction": "Helios Labs partnered with Kestrel Systems on the Meridian project in 2023. The Meridian project is sponsored jointly by both organizations.",
+          "reference": "The indexed sources do not contain this information.",
+          "f1": 0.0,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "meridian-project",
+            "helios-overview",
+            "fjord-protocol",
+            "aurora-engine",
+            "vantage-robotics"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Who founded Northwind Analytics?",
+          "prediction": "Nuria Castell previously worked at Northwind Analytics. Nuria Castell led the drone telemetry programme before founding Vantage Robotics.",
+          "reference": "The indexed sources do not contain this information.",
+          "f1": 0.0,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "vantage-robotics",
+            "aurora-engine",
+            "helios-overview",
+            "meridian-project"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Which internal risk model does Northwind Analytics maintain?",
+          "prediction": "The indexed sources do not contain this information.",
+          "reference": "The indexed sources do not contain this information.",
+          "f1": 1.0,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": true,
+          "citations": [
+            "aurora-engine",
+            "vantage-robotics",
+            "helios-overview"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Which edge appliance did Kestrel Systems discontinue in 2024?",
+          "prediction": "The indexed sources do not contain this information.",
+          "reference": "The indexed sources do not contain this information.",
+          "f1": 1.0,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": true,
+          "citations": [
+            "meridian-project",
+            "fjord-protocol",
+            "helios-overview",
+            "vantage-robotics",
+            "aurora-engine"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Who leads the platform team at Northwind Analytics?",
+          "prediction": "The Fjord Protocol replaced the older Sable Protocol in 2022. The Sable Protocol was deprecated because of its weak consistency guarantees under partition. Northwind Analytics deployed Aurora Engine for its fraud detection platform in 2022. Northwind Analytics is headquartered in Rotterdam and runs Aurora Engine on three clusters. Nuria Castell previously worked at Northwind Analytics. Nuria Caste",
+          "reference": "The indexed sources do not contain this information.",
+          "f1": 0.0,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "aurora-engine",
+            "vantage-robotics",
+            "meridian-project",
+            "helios-overview",
+            "fjord-protocol"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Which appliance replaced the Harrier gateway at Kestrel Systems?",
+          "prediction": "The indexed sources do not contain this information.",
+          "reference": "The indexed sources do not contain this information.",
+          "f1": 1.0,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": true,
+          "citations": [
+            "fjord-protocol",
+            "meridian-project",
+            "helios-overview",
+            "vantage-robotics",
+            "aurora-engine"
+          ],
+          "stale_communities_touched": 0
+        }
+      ]
+    },
+    {
+      "system": "flat-vector",
+      "scenario": "deletion-survivors",
+      "n": 3,
+      "f1": 0.1014,
+      "em": 0.0,
+      "recall": 0.3333,
+      "stale_answer_rate": 0.0,
+      "abstention_rate": 0.3333,
+      "update_cost": {
+        "tokens": 0,
+        "wall_ms": 0.01,
+        "usd": 0.0,
+        "communities_recomputed": 0,
+        "changes": 2,
+        "tokens_per_change": 0.0
+      },
+      "index": {
+        "entities": 0,
+        "relations": 0,
+        "communities": 0,
+        "chunks": 12,
+        "active_documents": 5
+      },
+      "staleness": {},
+      "per_question": [
+        {
+          "question": "Which protocol does Aurora Engine use for replication between clusters?",
+          "prediction": "Aurora Engine is a streaming graph database built for continuous analytical queries. Aurora Engine was released in 2021 by Helios Labs after two years of internal development. Aurora Engine uses the Fjord Protocol for replication between clusters. The Fjord Protocol gives Aurora Engine strong consistency across regions.",
+          "reference": "Aurora Engine uses the Fjord Protocol.",
+          "f1": 0.2041,
+          "recall": 1.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "aurora-engine",
+            "fjord-protocol",
+            "helios-overview",
+            "meridian-project"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Who founded Helios Labs?",
+          "prediction": "Helios Labs partnered with Kestrel Systems on the Meridian project in 2023. The Meridian project is sponsored jointly by both organizations. Aurora Engine exposes a query language called Lumen. Lumen was designed by the systems group at Helios Labs.",
+          "reference": "Marit Solberg founded Helios Labs.",
+          "f1": 0.1,
+          "recall": 0.0,
+          "stale": false,
+          "abstained": false,
+          "citations": [
+            "helios-overview",
+            "aurora-engine",
+            "meridian-project",
+            "fjord-protocol"
+          ],
+          "stale_communities_touched": 0
+        },
+        {
+          "question": "Which protocol did the Fjord Protocol replace?",
+          "prediction": "The indexed sources do not contain this information.",
+          "reference": "The Fjord Protocol replaced the Sable Protocol.",
+          "f1": 0.0,
+          "recall": 0.0,
+          "stale": false,
+          "abstained": true,
+          "citations": [
+            "fjord-protocol",
+            "meridian-project",
+            "helios-overview",
+            "aurora-engine",
+            "vantage-robotics"
+          ],
+          "stale_communities_touched": 0
+        }
+      ]
+    }
+  ],
+  "pareto": {
+    "points": [
+      {
+        "label": "evolving/budget=0",
+        "recompute_budget": 0,
+        "compaction_interval": 900,
+        "update_tokens": 5497,
+        "update_usd": 0.07253,
+        "update_wall_ms": 19.49,
+        "communities_recomputed": 0,
+        "dirty_fraction_after": 0.7143,
+        "mean_stale_touched": 2.2353,
+        "stale_answer_rate": 0.1667,
+        "deletion_f1": 0.173,
+        "new_info_recall": 0.8,
+        "base_recall": 0.8333,
+        "survivor_recall": 1.0,
+        "entities": 18,
+        "relations": 37
+      },
+      {
+        "label": "evolving/budget=1",
+        "recompute_budget": 1,
+        "compaction_interval": 900,
+        "update_tokens": 8601,
+        "update_usd": 0.096856,
+        "update_wall_ms": 21.54,
+        "communities_recomputed": 6,
+        "dirty_fraction_after": 0.4286,
+        "mean_stale_touched": 1.4118,
+        "stale_answer_rate": 0.0,
+        "deletion_f1": 0.1667,
+        "new_info_recall": 0.8,
+        "base_recall": 0.8333,
+        "survivor_recall": 1.0,
+        "entities": 18,
+        "relations": 37
+      },
+      {
+        "label": "evolving/budget=2",
+        "recompute_budget": 2,
+        "compaction_interval": 900,
+        "update_tokens": 10773,
+        "update_usd": 0.113618,
+        "update_wall_ms": 23.02,
+        "communities_recomputed": 12,
+        "dirty_fraction_after": 0.2857,
+        "mean_stale_touched": 0.8235,
+        "stale_answer_rate": 0.0,
+        "deletion_f1": 0.1667,
+        "new_info_recall": 0.8,
+        "base_recall": 0.8333,
+        "survivor_recall": 1.0,
+        "entities": 18,
+        "relations": 37
+      },
+      {
+        "label": "evolving/budget=4",
+        "recompute_budget": 4,
+        "compaction_interval": 900,
+        "update_tokens": 14986,
+        "update_usd": 0.146307,
+        "update_wall_ms": 25.54,
+        "communities_recomputed": 19,
+        "dirty_fraction_after": 0.0,
+        "mean_stale_touched": 0.0,
+        "stale_answer_rate": 0.0,
+        "deletion_f1": 0.1667,
+        "new_info_recall": 0.8,
+        "base_recall": 0.8333,
+        "survivor_recall": 1.0,
+        "entities": 18,
+        "relations": 37
+      },
+      {
+        "label": "evolving/budget=8",
+        "recompute_budget": 8,
+        "compaction_interval": 900,
+        "update_tokens": 14986,
+        "update_usd": 0.146307,
+        "update_wall_ms": 24.93,
+        "communities_recomputed": 19,
+        "dirty_fraction_after": 0.0,
+        "mean_stale_touched": 0.0,
+        "stale_answer_rate": 0.0,
+        "deletion_f1": 0.1667,
+        "new_info_recall": 0.8,
+        "base_recall": 0.8333,
+        "survivor_recall": 1.0,
+        "entities": 18,
+        "relations": 37
+      },
+      {
+        "label": "evolving/drain",
+        "recompute_budget": null,
+        "compaction_interval": 900,
+        "update_tokens": 14986,
+        "update_usd": 0.146307,
+        "update_wall_ms": 25.62,
+        "communities_recomputed": 19,
+        "dirty_fraction_after": 0.0,
+        "mean_stale_touched": 0.0,
+        "stale_answer_rate": 0.0,
+        "deletion_f1": 0.1667,
+        "new_info_recall": 0.8,
+        "base_recall": 0.8333,
+        "survivor_recall": 1.0,
+        "entities": 18,
+        "relations": 37
+      },
+      {
+        "label": "full-reindex",
+        "recompute_budget": null,
+        "compaction_interval": null,
+        "update_tokens": 75059,
+        "update_usd": 0.865908,
+        "update_wall_ms": 155.33,
+        "communities_recomputed": 56,
+        "dirty_fraction_after": 0.0,
+        "mean_stale_touched": 0.0,
+        "stale_answer_rate": 0.0,
+        "deletion_f1": 0.1667,
+        "new_info_recall": 0.8,
+        "base_recall": 0.8333,
+        "survivor_recall": 1.0,
+        "entities": 18,
+        "relations": 37
+      }
+    ],
+    "frontier": [
+      "evolving/budget=0",
+      "evolving/budget=1",
+      "evolving/budget=2",
+      "evolving/budget=4",
+      "evolving/budget=8",
+      "evolving/drain"
+    ]
+  },
+  "compaction": [
+    {
+      "compaction_interval": null,
+      "compactions": 0,
+      "update_tokens": 14986,
+      "communities": 7,
+      "mean_community_size": 2.57,
+      "max_community_size": 8,
+      "base_recall": 0.8333,
+      "new_info_recall": 0.8,
+      "stale_answer_rate": 0.0
+    },
+    {
+      "compaction_interval": 1,
+      "compactions": 6,
+      "update_tokens": 23419,
+      "communities": 3,
+      "mean_community_size": 6.0,
+      "max_community_size": 7,
+      "base_recall": 0.8333,
+      "new_info_recall": 0.8,
+      "stale_answer_rate": 0.0
+    },
+    {
+      "compaction_interval": 2,
+      "compactions": 3,
+      "update_tokens": 18914,
+      "communities": 3,
+      "mean_community_size": 6.0,
+      "max_community_size": 7,
+      "base_recall": 0.8333,
+      "new_info_recall": 0.8,
+      "stale_answer_rate": 0.0
+    },
+    {
+      "compaction_interval": 4,
+      "compactions": 1,
+      "update_tokens": 16630,
+      "communities": 5,
+      "mean_community_size": 3.6,
+      "max_community_size": 7,
+      "base_recall": 0.8333,
+      "new_info_recall": 0.8,
+      "stale_answer_rate": 0.0
+    },
+    {
+      "compaction_interval": 8,
+      "compactions": 0,
+      "update_tokens": 14986,
+      "communities": 7,
+      "mean_community_size": 2.57,
+      "max_community_size": 8,
+      "base_recall": 0.8333,
+      "new_info_recall": 0.8,
+      "stale_answer_rate": 0.0
+    }
+  ],
+  "resolution": [
+    {
+      "tau_sim": 0.6,
+      "entities": 19,
+      "relations": 37,
+      "merge_rate": 0.6275,
+      "base_recall": 0.8333,
+      "base_f1": 0.4334
+    },
+    {
+      "tau_sim": 0.7,
+      "entities": 19,
+      "relations": 37,
+      "merge_rate": 0.6275,
+      "base_recall": 0.8333,
+      "base_f1": 0.4334
+    },
+    {
+      "tau_sim": 0.8,
+      "entities": 19,
+      "relations": 37,
+      "merge_rate": 0.6275,
+      "base_recall": 0.8333,
+      "base_f1": 0.4334
+    },
+    {
+      "tau_sim": 0.86,
+      "entities": 19,
+      "relations": 37,
+      "merge_rate": 0.6275,
+      "base_recall": 0.8333,
+      "base_f1": 0.4334
+    },
+    {
+      "tau_sim": 0.92,
+      "entities": 19,
+      "relations": 37,
+      "merge_rate": 0.6275,
+      "base_recall": 0.8333,
+      "base_f1": 0.4334
+    },
+    {
+      "tau_sim": 0.98,
+      "entities": 19,
+      "relations": 37,
+      "merge_rate": 0.6275,
+      "base_recall": 0.8333,
+      "base_f1": 0.4334
+    }
+  ],
+  "scaling": [
+    {
+      "copies": 1,
+      "documents": 5,
+      "entities": 20,
+      "relations": 38,
+      "communities": 9,
+      "chunks": 12,
+      "build_tokens": 14995,
+      "one_update_tokens": 2491,
+      "one_update_wall_ms": 4.16,
+      "one_update_communities_recomputed": 3,
+      "reindex_cost_ratio": 6.02
+    },
+    {
+      "copies": 2,
+      "documents": 10,
+      "entities": 37,
+      "relations": 75,
+      "communities": 15,
+      "chunks": 27,
+      "build_tokens": 33209,
+      "one_update_tokens": 2495,
+      "one_update_wall_ms": 4.34,
+      "one_update_communities_recomputed": 3,
+      "reindex_cost_ratio": 13.31
+    },
+    {
+      "copies": 4,
+      "documents": 20,
+      "entities": 71,
+      "relations": 149,
+      "communities": 33,
+      "chunks": 56,
+      "build_tokens": 70005,
+      "one_update_tokens": 2499,
+      "one_update_wall_ms": 4.62,
+      "one_update_communities_recomputed": 3,
+      "reindex_cost_ratio": 28.01
+    },
+    {
+      "copies": 8,
+      "documents": 40,
+      "entities": 137,
+      "relations": 295,
+      "communities": 56,
+      "chunks": 114,
+      "build_tokens": 148122,
+      "one_update_tokens": 2503,
+      "one_update_wall_ms": 5.08,
+      "one_update_communities_recomputed": 3,
+      "reindex_cost_ratio": 59.18
+    }
+  ]
+}

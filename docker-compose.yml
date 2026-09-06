@@ -1,0 +1,165 @@
+# evolving-graphrag - single-node deployment (dev, demo, review).
+#
+# The topology is the argument: `api` is thin and synchronous and never blocks on a model;
+# `worker` is where cost lives and is the scaling knob (`--scale worker=N`); `arcadedb`
+# holds graph and vectors in one store; `redis` is queue and extraction cache.
+#
+#   make up      bring the stack up
+#   make demo    seed the mini-corpus and drive a live add/delete
+#   make down    stop, keeping the volumes
+
+name: evolving-graphrag
+
+x-egraph-env: &egraph-env
+  EGRAPH_STORE_BACKEND: ${EGRAPH_STORE_BACKEND:-arcadedb}
+  EGRAPH_ARCADEDB_URL: http://arcadedb:2480
+  EGRAPH_ARCADEDB_DATABASE: ${EGRAPH_ARCADEDB_DATABASE:-egraph}
+  EGRAPH_ARCADEDB_USER: root
+  EGRAPH_ARCADEDB_PASSWORD: ${ARCADEDB_PASSWORD:-playwithdata}
+  EGRAPH_QUEUE_BACKEND: arq
+  EGRAPH_REDIS_URL: redis://redis:6379
+  EGRAPH_LLM_BACKEND: ${EGRAPH_LLM_BACKEND:-mock}
+  EGRAPH_GATEWAY_URL: ${EGRAPH_GATEWAY_URL:-http://gateway:8080}
+  EGRAPH_LLM_MODEL: ${EGRAPH_LLM_MODEL:-claude-opus-5}
+  EGRAPH_EMBED_BACKEND: ${EGRAPH_EMBED_BACKEND:-hash}
+  EGRAPH_DIRTY_BATCH_SIZE: ${EGRAPH_DIRTY_BATCH_SIZE:-8}
+  EGRAPH_COMPACTION_INTERVAL_S: ${EGRAPH_COMPACTION_INTERVAL_S:-900}
+  EGRAPH_TAU_SIM: ${EGRAPH_TAU_SIM:-0.86}
+  EGRAPH_SEED: ${EGRAPH_SEED:-1337}
+  ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+  EGRAPH_GATEWAY_API_KEY: ${EGRAPH_GATEWAY_API_KEY:-}
+
+services:
+  arcadedb:
+    image: arcadedata/arcadedb:24.11.1
+    container_name: egraph-arcadedb
+    environment:
+      JAVA_OPTS: >-
+        -Darcadedb.server.rootPassword=${ARCADEDB_PASSWORD:-playwithdata}
+        -Darcadedb.server.defaultDatabases=egraph[root]
+        -Darcadedb.server.databaseDirectory=/home/arcadedb/databases
+    ports:
+      - "2480:2480"   # HTTP API + Studio
+      - "2424:2424"   # binary protocol
+    volumes:
+      - arcadedb-data:/home/arcadedb/databases
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf -u root:${ARCADEDB_PASSWORD:-playwithdata} http://localhost:2480/api/v1/databases || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: egraph-redis
+    # appendonly keeps queued jobs across a restart: a mutation that was accepted with a
+    # 202 must not evaporate because the queue bounced.
+    command: ["redis-server", "--appendonly", "yes", "--save", "60", "1"]
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+
+  api:
+    build:
+      context: .
+      target: api
+    container_name: egraph-api
+    environment: *egraph-env
+    ports:
+      - "8000:8000"
+    volumes:
+      - api-data:/app/data
+      - ./results:/app/results
+    depends_on:
+      arcadedb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  worker:
+    build:
+      context: .
+      target: worker
+    environment:
+      <<: *egraph-env
+      WORKER_METRICS_PORT: "9100"
+      WORKER_MAX_JOBS: ${WORKER_MAX_JOBS:-10}
+    # THE THROUGHPUT KNOB: `docker compose up --scale worker=4`.
+    # Extraction and summarisation are the expensive operations and they are here.
+    ports:
+      - "9100:9100"
+    depends_on:
+      arcadedb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      api:
+        condition: service_started
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: egraph-frontend
+    ports:
+      - "5173:80"
+    environment:
+      # Same-origin proxy to the api, so the browser needs no CORS exemption and no
+      # build-time API URL baked into the bundle.
+      API_UPSTREAM: http://api:8000
+    depends_on:
+      api:
+        condition: service_started
+    restart: unless-stopped
+
+  prometheus:
+    image: prom/prometheus:v3.0.1
+    container_name: egraph-prometheus
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.retention.time=15d
+      - --web.enable-lifecycle
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./config/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prom-data:/prometheus
+    depends_on:
+      - api
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:11.4.0
+    container_name: egraph-grafana
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD:-admin}
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Viewer
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./config/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./config/grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - grafana-data:/var/lib/grafana
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+
+volumes:
+  arcadedb-data:
+  redis-data:
+  prom-data:
+  grafana-data:
+  api-data:

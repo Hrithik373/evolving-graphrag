@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 420" width="720" height="420" font-family='system-ui, -apple-system, "Segoe UI", sans-serif'>
+<rect width="720" height="420" fill="#fcfcfb"/>
+<text x="78" y="26" font-size="15" font-weight="600" fill="#0b0b0b">Update cost vs corpus size</text>
+<text x="78" y="44" font-size="11.5" fill="#52514e">One document change costs the same at every corpus size; rebuilding does not. That gap is the asymptotic form of the argument.</text>
+<line x1="78" x2="686" y1="358.0" y2="358.0" stroke="#e1e0d9" stroke-width="1"/>
+<text x="70" y="362.0" text-anchor="end" font-size="10.5" fill="#898781">0</text>
+<line x1="78" x2="686" y1="282.0" y2="282.0" stroke="#e1e0d9" stroke-width="1"/>
+<text x="70" y="286.0" text-anchor="end" font-size="10.5" fill="#898781">50.0k</text>
+<line x1="78" x2="686" y1="206.0" y2="206.0" stroke="#e1e0d9" stroke-width="1"/>
+<text x="70" y="210.0" text-anchor="end" font-size="10.5" fill="#898781">100.0k</text>
+<line x1="78" x2="686" y1="130.0" y2="130.0" stroke="#e1e0d9" stroke-width="1"/>
+<text x="70" y="134.0" text-anchor="end" font-size="10.5" fill="#898781">150.0k</text>
+<line x1="78" x2="686" y1="54.0" y2="54.0" stroke="#e1e0d9" stroke-width="1"/>
+<text x="70" y="58.0" text-anchor="end" font-size="10.5" fill="#898781">200.0k</text>
+<line x1="78" x2="686" y1="358" y2="358" stroke="#c3c2b7" stroke-width="1"/>
+<text x="20" y="206.0" font-size="11" fill="#52514e" transform="rotate(-90 20 206.0)" text-anchor="middle">tokens</text>
+<text x="382.0" y="408" text-anchor="middle" font-size="11" fill="#52514e">documents in the corpus</text>
+<path d="M94.7,358 L94.7,339.2 Q94.7,335.2 98.7,335.2 L142.4,335.2 Q146.4,335.2 146.4,339.2 L146.4,358 Z" fill="#eb6834"/>
+<text x="120.6" y="330.2" text-anchor="middle" font-size="10" font-weight="600" fill="#0b0b0b">15.0k</text>
+<path d="M161.6,358 L161.6,358.2 Q161.6,354.2 165.6,354.2 L209.3,354.2 Q213.3,354.2 213.3,358.2 L213.3,358 Z" fill="#2a78d6"/>
+<text x="187.4" y="349.2" text-anchor="middle" font-size="10" font-weight="600" fill="#0b0b0b">2.5k</text>
+<text x="154.0" y="375.0" text-anchor="middle" font-size="10.5" fill="#52514e">5</text>
+<text x="154.0" y="389.0" text-anchor="middle" font-size="10" fill="#898781">6.02x</text>
+<path d="M246.7,358 L246.7,311.5 Q246.7,307.5 250.7,307.5 L294.4,307.5 Q298.4,307.5 298.4,311.5 L298.4,358 Z" fill="#eb6834"/>
+<text x="272.6" y="302.5" text-anchor="middle" font-size="10" font-weight="600" fill="#0b0b0b">33.2k</text>
+<path d="M313.6,358 L313.6,358.2 Q313.6,354.2 317.6,354.2 L361.3,354.2 Q365.3,354.2 365.3,358.2 L365.3,358 Z" fill="#2a78d6"/>
+<text x="339.4" y="349.2" text-anchor="middle" font-size="10" font-weight="600" fill="#0b0b0b">2.5k</text>
+<text x="306.0" y="375.0" text-anchor="middle" font-size="10.5" fill="#52514e">10</text>
+<text x="306.0" y="389.0" text-anchor="middle" font-size="10" fill="#898781">13.31x</text>
+<path d="M398.7,358 L398.7,255.6 Q398.7,251.6 402.7,251.6 L446.4,251.6 Q450.4,251.6 450.4,255.6 L450.4,358 Z" fill="#eb6834"/>
+<text x="424.6" y="246.6" text-anchor="middle" font-size="10" font-weight="600" fill="#0b0b0b">70.0k</text>
+<path d="M465.6,358 L465.6,358.2 Q465.6,354.2 469.6,354.2 L513.3,354.2 Q517.3,354.2 517.3,358.2 L517.3,358 Z" fill="#2a78d6"/>
+<text x="491.4" y="349.2" text-anchor="middle" font-size="10" font-weight="600" fill="#0b0b0b">2.5k</text>
+<text x="458.0" y="375.0" text-anchor="middle" font-size="10.5" fill="#52514e">20</text>
+<text x="458.0" y="389.0" text-anchor="middle" font-size="10" fill="#898781">28.01x</text>
+<path d="M550.7,358 L550.7,136.9 Q550.7,132.9 554.7,132.9 L598.4,132.9 Q602.4,132.9 602.4,136.9 L602.4,358 Z" fill="#eb6834"/>
+<text x="576.6" y="127.9" text-anchor="middle" font-size="10" font-weight="600" fill="#0b0b0b">148.1k</text>
+<path d="M617.6,358 L617.6,358.2 Q617.6,354.2 621.6,354.2 L665.3,354.2 Q669.3,354.2 669.3,358.2 L669.3,358 Z" fill="#2a78d6"/>
+<text x="643.4" y="349.2" text-anchor="middle" font-size="10" font-weight="600" fill="#0b0b0b">2.5k</text>
+<text x="610.0" y="375.0" text-anchor="middle" font-size="10.5" fill="#52514e">40</text>
+<text x="610.0" y="389.0" text-anchor="middle" font-size="10" fill="#898781">59.18x</text>
+<g transform="translate(78,374)" font-size="11" fill="#52514e"><rect x="0" y="-9" width="10" height="10" rx="3" fill="#eb6834"/><text x="16" y="0">full rebuild</text><rect x="110" y="-9" width="10" height="10" rx="3" fill="#2a78d6"/><text x="126" y="0">one incremental update</text></g>
+</svg>

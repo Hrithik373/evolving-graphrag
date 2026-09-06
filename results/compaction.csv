@@ -1,0 +1,6 @@
+compaction_interval,compactions,update_tokens,communities,mean_community_size,max_community_size,base_recall,new_info_recall,stale_answer_rate
+,0,14986,7,2.57,8,0.8333,0.8,0.0
+1,6,23419,3,6.0,7,0.8333,0.8,0.0
+2,3,18914,3,6.0,7,0.8333,0.8,0.0
+4,1,16630,5,3.6,7,0.8333,0.8,0.0
+8,0,14986,7,2.57,8,0.8333,0.8,0.0

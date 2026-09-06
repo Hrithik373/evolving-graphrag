@@ -1,0 +1,32 @@
+# Scrapes the api and every worker replica. The worker is scraped separately because the
+# cost and recompute counters are produced there, not in the api.
+global:
+  scrape_interval: 5s
+  evaluation_interval: 15s
+  external_labels:
+    project: evolving-graphrag
+
+scrape_configs:
+  - job_name: egraph-api
+    metrics_path: /metrics
+    static_configs:
+      - targets: ["api:8000"]
+        labels:
+          component: api
+
+  - job_name: egraph-worker
+    metrics_path: /metrics
+    # Compose's DNS returns every replica for the service name, so scaling the worker
+    # adds targets without editing this file.
+    dns_sd_configs:
+      - names: ["worker"]
+        type: A
+        port: 9100
+    static_configs:
+      - targets: ["worker:9100"]
+        labels:
+          component: worker
+
+  - job_name: prometheus
+    static_configs:
+      - targets: ["localhost:9090"]
